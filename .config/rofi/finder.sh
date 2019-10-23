@@ -21,8 +21,8 @@ then
   then
     while read -r line; do
       echo "$line" \?\?
-    done <<< $(find /tank/readings -iname *"${QUERY#\?}"*.pdf 2>&1 | grep -v 'Permission denied\|Input/output error')
+    done <<< $(find /tank/readings /tank/ebooks -iname *"${QUERY#\?}"*.pdf 2>&1 | grep -v 'Permission denied\|Input/output error')
   else
-    find /tank/readings -iname *"${QUERY#!}"*.pdf 2>&1 | grep -v 'Permission denied\|Input/output error'
+    find /tank/readings /tank/ebooks -iname *"${QUERY#!}"*.pdf 2>&1 | grep -v 'Permission denied\|Input/output error'
   fi
 fi

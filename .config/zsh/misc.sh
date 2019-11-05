@@ -7,7 +7,7 @@ if [ -d "/opt/apps/Xilinx/Vivado/2019.1" ]; then
   export PATH=$PATH:/opt/Xilinx/Vivado/2019.1/bin
 fi
 
-# QT message suppress 
+# QT message suppress
 export QT_LOGGING_RULES="qt5ct.debug=false"
 
 # set GO path
@@ -18,4 +18,9 @@ fi
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
+
+export PATH="$HOME/.local/bin:$PATH"
+
+export PYTHONPATH=$PYTHONPATH:/usr/lib/python3.7:/usr/lib/python3.7/lib-dynload:/usr/lib/python3.7/site-packages
+
 

@@ -8,7 +8,7 @@ set nobackup
 
 colorscheme yin
 
-" show the whitespaces
+" show whitespaces
 set list
 set listchars=tab:→ ,space:·
 
@@ -48,6 +48,17 @@ set ruler                        " show me where the cursor is
 set rulerformat=%l/%L(%p%%),%c   " a better ruler
 set showmatch                    " show matching brackets
 
+"search will center on the line it is found in
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Remove trailing whitespace on save
+"autocmd BufWritePre * %s/\s\+$//e
+augroup TrailingSpaces
+    autocmd!
+    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
+augroup END
+
 " Toggle dark/light default color theme for shitty terms
 map <F3> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
 
@@ -56,14 +67,6 @@ nnoremap <F5> :set nonumber!<CR>:set foldcolumn=0<CR>
 
 " apply rot13 for people snooping over shoulder, good fun
 map <F10> <ESC>ggg?G``
-
-" remove trailing whitespace on the following filetypes
-autocmd FileType c,cpp,h,py,ts,js autocmd BufWritePre <buffer> %s/\s\+$//e
-
-" Hexmode
-"nnoremap <C-H> :Hexmode<CR>
-"inoremap <C-H> <Esc>:Hexmode<CR>
-"vnoremap <C-H> :<C-U>Hexmode<CR>
 
 " Compile and run keymappings
 au FileType php map <F6> :!php %<CR>

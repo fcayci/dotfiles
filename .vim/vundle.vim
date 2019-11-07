@@ -22,7 +22,7 @@ Plugin 'tomtom/tcomment_vim'
 "Plugin 'nathanaelkane/vim-indent-guides'
 "Plugin 'airblade/vim-gitgutter'
 " autocomplete
-Plugin 'davidhalter/jedi-vim'
+"Plugin 'davidhalter/jedi-vim'
 " typescript support
 "Plugin 'leafgarland/typescript-vim'
 " javascript support

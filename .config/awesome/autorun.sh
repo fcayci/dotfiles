@@ -27,16 +27,16 @@ fi
 
 run xfsettingsd
 run nm-applet
-#run cmst
 run light-locker
 run compton --shadow-exclude '!focused'
 run xcape -e 'Super_L=Super_L|Control_L|Escape'
 run thunar --daemon
 run pa-applet
-#run pamac-tray
+run pamac-tray
+run xrandr --output HDMI2 --primary --auto --output HDMI1 --left-of HDMI2 --auto
 # setxkbmap -layout "us,tr"
 run blueman-applet
 run clipit
 run unclutter --timeout 2 --ignore-scrolling
-run /home/fcayci/.dropbox-dist/dropboxd
+run ~/.dropbox-dist/dropboxd
 run msm_notifier

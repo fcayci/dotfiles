@@ -16,6 +16,10 @@ if [ -d "/tank/go" ]; then
   export PATH=$PATH:$GOPATH/bin
 fi
 
+if [ -d "/usr/local/cocotb-1.1.0" ]; then
+    export COCOTB="/usr/local/cocotb-1.1.0"
+fi
+
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 

@@ -88,7 +88,7 @@ local altkey       = "Mod1"
 local terminal     = os.getenv("TERMINAL") or "lxterminal"
 local editor       = os.getenv("EDITOR") or "vim"
 local gui_editor   = "code"
-local browser      = "brave" or "firefox"
+local browser      = "firefox" or "brave"
 local filemanager  = "thunar" or "doublecmd"
 local guieditor    = "code" or "gvim"
 local scrlocker    = "xlock -mousemotion +description -mode blank -bg black -fg grey30"
@@ -429,30 +429,30 @@ globalkeys = my_table.join(
     -- XF86Launch9
 
     -- Menubar
-     awful.key({ }, "XF86AudioPrev",
-         function ()
-             awful.spawn("playerctl previous")
-         end,
-         {description = "play previous", group = "launcher"}),
+    awful.key({ }, "XF86AudioPrev",
+        function ()
+            awful.spawn("playerctl previous")
+        end,
+        {description = "play previous", group = "launcher"}),
 
-     awful.key({ }, "XF86AudioNext",
-         function ()
-             awful.spawn("playerctl next")
-         end,
-         {description = "play next", group = "launcher"}),
+    awful.key({ }, "XF86AudioNext",
+        function ()
+            awful.spawn("playerctl next")
+        end,
+        {description = "play next", group = "launcher"}),
 
-     awful.key({ }, "XF86AudioPlay",
-         function ()
-             if spplaying then
-                 awful.spawn("playerctl play-pause")
-                 naughty.notify({ title = "play", icon = "/usr/share/icons/gnome/32x32/actions/player_play.png", timeout = 3 })
-             else
-                 awful.spawn("playerctl play-pause")
-                 naughty.notify({ title = "pause", icon = "/usr/share/icons/gnome/32x32/actions/player_pause.png", timeout = 3 })
-             end
-             spplaying = not spplaying
-         end,
-         {description = "play/pause", group = "launcher"}),
+    awful.key({ }, "XF86AudioPlay",
+        function ()
+            if spplaying then
+                awful.spawn("playerctl play-pause")
+                naughty.notify({ title = "play", icon = "/usr/share/icons/gnome/32x32/actions/player_play.png", timeout = 3 })
+            else
+                awful.spawn("playerctl play-pause")
+                naughty.notify({ title = "pause", icon = "/usr/share/icons/gnome/32x32/actions/player_pause.png", timeout = 3 })
+            end
+            spplaying = not spplaying
+        end,
+        {description = "play/pause", group = "launcher"}),
 
     -- Menubar
     awful.key({ modkey }, "space", function () awful.spawn("/usr/bin/rofi -show drun -modi window,drun,run,find:~/.config/rofi/finder.sh") end,
@@ -615,8 +615,9 @@ awful.rules.rules = {
 
 
     -- Set Firefox to always map on the first tag on screen 1.
-    --{ rule = { class = "Firefox" },
-    --  properties = { screen = 1, tag = awful.util.tagnames[1] } },
+    { rule = { class = "firefox" },
+      -- properties = { screen = 1, tag = awful.util.tagnames[1] } },
+      properties = { tag = awful.util.tagnames[1] } },
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
@@ -645,7 +646,7 @@ end)
 --         beautiful.titlebar_fun(c)
 --         return
 --     end
---
+
 --     -- Default
 --     -- buttons for the titlebar
 --     local buttons = my_table.join(
@@ -659,7 +660,7 @@ end)
 --             awful.mouse.client.resize(c)
 --         end)
 --     )
---
+
 --     awful.titlebar(c, {size = 16}) : setup {
 --         { -- Left
 --             awful.titlebar.widget.iconwidget(c),
@@ -687,9 +688,9 @@ end)
 -- end)
 --
 -- Enable sloppy focus, so that focus follows mouse.
---client.connect_signal("mouse::enter", function(c)
---    c:emit_signal("request::activate", "mouse_enter", {raise = true})
---end)
+client.connect_signal("mouse::enter", function(c)
+   c:emit_signal("request::activate", "mouse_enter", {raise = true})
+end)
 
 -- No border for maximized clients
 function border_adjust(c)

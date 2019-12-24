@@ -4,6 +4,7 @@ alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 alias sysinfo="inxi -F"
 alias open="xdg-open"
 alias ifconfig="ip address"
+alias diff='diff --color=auto'
 
 # macbook specific
 alias morepower="sudo cpupower frequency-set -g performance && cpupower frequency-info"

@@ -370,7 +370,7 @@ globalkeys = my_table.join(
     -- ALSA volume control
     awful.key({ }, "XF86AudioRaiseVolume",
         function ()
-            os.execute("amixer -q set 'Master' 10%+")
+            os.execute("pulseaudio-ctl up")
             naughty.notify({ title = "Volume", text = "up", icon = "/usr/share/icons/Arc/apps/64/multimedia-volume-control.png", timeout = 0.5 })
             --os.execute(string.format("amixer -q set %s 10%%+", beautiful.volume.channel))
             --beautiful.volume.update()
@@ -378,7 +378,7 @@ globalkeys = my_table.join(
         {description = "volume up", group = "hotkeys"}),
     awful.key({ }, "XF86AudioLowerVolume",
         function ()
-            os.execute("amixer -q set 'Master' 10%-")
+            os.execute("pulseaudio-ctl down")
             naughty.notify({ title = "Volume", text = "down", icon = "/usr/share/icons/Arc/apps/64/multimedia-volume-control.png", timeout = 0.5 })
             --os.execute(string.format("amixer -q set %s 10%%-", beautiful.volume.channel))
             --beautiful.volume.update()
@@ -386,7 +386,7 @@ globalkeys = my_table.join(
         {description = "volume down", group = "hotkeys"}),
     awful.key({ }, "XF86AudioMute",
         function ()
-            os.execute("amixer -q set 'Master' toggle")
+            os.execute("pulseaudio-ctl mute")
             naughty.notify({ title = "Volume", text = "mute/unmute", icon = "/usr/share/icons/Arc/apps/64/multimedia-volume-control.png", timeout = 0.5 })
             --os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
             --beautiful.volume.update()
@@ -445,10 +445,10 @@ globalkeys = my_table.join(
         function ()
             if spplaying then
                 awful.spawn("playerctl play-pause")
-                naughty.notify({ title = "play", icon = "/usr/share/icons/gnome/32x32/actions/player_play.png", timeout = 3 })
+                naughty.notify({ title = "play", icon = "/usr/share/icons/Arc/actions/24/player_play.png", timeout = 3 })
             else
                 awful.spawn("playerctl play-pause")
-                naughty.notify({ title = "pause", icon = "/usr/share/icons/gnome/32x32/actions/player_pause.png", timeout = 3 })
+                naughty.notify({ title = "pause", icon = "/usr/share/icons/Arc/actions/24/player_pause.png", timeout = 3 })
             end
             spplaying = not spplaying
         end,

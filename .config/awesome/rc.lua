@@ -87,10 +87,8 @@ local modkey       = "Mod4"
 local altkey       = "Mod1"
 local terminal     = os.getenv("TERMINAL") or "lxterminal"
 local editor       = os.getenv("EDITOR") or "vim"
-local gui_editor   = "code"
-local browser      = "firefox" or "brave"
-local filemanager  = "thunar" or "doublecmd"
-local guieditor    = "code" or "gvim"
+local browser      = "firefox"
+local filemanager  = "thunar"
 local scrlocker    = "xlock -mousemotion +description -mode blank -bg black -fg grey30"
 local spplaying = false
 
@@ -272,21 +270,6 @@ root.buttons(my_table.join(
 
 -- {{{ Key bindings
 globalkeys = my_table.join(
-    -- Take a screenshot
-    awful.key({modkey,            }, "XF86Eject", function () awful.spawn("/usr/bin/i3-scrot -d")   end,
-            {description = "capture a screenshot", group = "screenshot"}),
-    awful.key({"Control"          }, "XF86Eject", function () awful.spawn("/usr/bin/i3-scrot -w")   end,
-            {description = "capture a screenshot of active window", group = "screenshot"}),
-    awful.key({"Shift"            }, "XF86Eject", function () awful.util.spawn_with_shell("sleep 0.2 && /usr/bin/i3-scrot -s")   end,
-            {description = "capture a screenshot of selection", group = "screenshot"}),
-
-    -- X screen locker
-    awful.key({ modkey }, "F1", function () os.execute(scrlocker) end,
-              {description = "lock screen", group = "hotkeys"}),
-
-    -- Hotkeys
-    awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-              {description = "show help", group="awesome"}),
 
     -- Non-empty tag browsing
     awful.key({ modkey }, "Left", function () lain.util.tag_view_nonempty(-1) end,
@@ -314,37 +297,11 @@ globalkeys = my_table.join(
         awful.client.togglemarked()
     end),
 
-    awful.key({ modkey,           }, "Escape", function () awful.util.mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
-
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "Tab", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
     awful.key({ modkey            }, "o", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "client"}),
-    -- Show/Hide Wibox
-    awful.key({ modkey }, "h", function ()
-            for s in screen do
-                s.mywibox.visible = not s.mywibox.visible
-                if s.mybottomwibox then
-                    s.mybottomwibox.visible = not s.mybottomwibox.visible
-                end
-            end
-        end,
-        {description = "toggle wibox", group = "awesome"}),
-
-    -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
-              {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey,           }, "t", function () awful.spawn("thunar") end,
-              {description = "open thunar", group = "launcher"}),
-    awful.key({ modkey,           }, "d", function () awful.spawn("doublecmd") end,
-              {description = "open double commander", group = "launcher"}),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
-              {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
-
     awful.key({ modkey, "Shift"   }, "=",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "-",     function () awful.tag.incmwfact(-0.05)          end,
@@ -353,129 +310,86 @@ globalkeys = my_table.join(
               {description = "select next", group = "layout"}),
 
     awful.key({ modkey, "Shift" }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                      client.focus = c
-                      c:raise()
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
-
-    -- Dropdown application
-    -- awful.key({ modkey, }, "z", function () awful.screen.focused().quake:toggle() end,
-    --           {description = "dropdown application", group = "launcher"}),
-
-    -- ALSA volume control
-    awful.key({ }, "XF86AudioRaiseVolume",
         function ()
-            os.execute("pulseaudio-ctl up")
-            naughty.notify({ title = "Volume", text = "up", icon = "/usr/share/icons/Arc/apps/64/multimedia-volume-control.png", timeout = 0.5 })
-            --os.execute(string.format("amixer -q set %s 10%%+", beautiful.volume.channel))
-            --beautiful.volume.update()
+            local c = awful.client.restore()
+            -- Focus restored client
+            if c then
+                client.focus = c
+                c:raise()
+            end
         end,
+        {description = "restore minimized", group = "client"}),
+
+    -- awesome controls
+    awful.key({ modkey }, "Escape", function () awful.util.mymainmenu:show() end,
+        {description = "show main menu", group = "awesome"}),
+    awful.key({ modkey }, "s", hotkeys_popup.show_help,
+        {description = "show help", group="awesome"}),
+    awful.key({ modkey, "Control" }, "r", awesome.restart,
+        {description = "reload awesome", group = "awesome"}),
+    awful.key({ modkey, "Shift"   }, "q", awesome.quit,
+        {description = "quit awesome", group = "awesome"}),
+
+    -- custom helpers
+    awful.key({ modkey }, "Return", function () awful.spawn(terminal) end,
+        {description = "open a terminal", group = "launcher"}),
+    awful.key({ modkey }, "t", function () awful.spawn(filemanager) end,
+        {description = "open file manager", group = "launcher"}),
+    awful.key({ modkey }, "b", function () awful.spawn(browser) end,
+        {description = "run browser", group = "launcher"}),
+    awful.key({ }, "XF86LaunchA", function () awful.spawn("zettlr") end,
+        {description = "zettlr", group = "launcher"}),
+    awful.key({ }, "XF86LaunchB", function () awful.spawn("lxterminal -e htop") end,
+        {description = "show htop", group = "launcher"}),
+    awful.key({ }, "XF86Tools", function () awful.spawn("thunar /tank/readings") end,
+        {description = "show readings", group = "launcher"}),
+    awful.key({ }, "XF86Launch5", function () awful.spawn("thunar /tank/courses") end,
+        {description = "show courses", group = "launcher"}),
+    awful.key({ }, "XF86Launch6", function () awful.spawn("thunar /tank/tablet") end,
+        {description = "show courses", group = "launcher"}),        
+
+    -- screenshot
+    awful.key({ modkey }, "XF86Eject", function () awful.spawn("/usr/bin/i3-scrot -d") end,
+        {description = "capture a screenshot", group = "hotkeys"}),
+    awful.key({"Control" }, "XF86Eject", function () awful.spawn("/usr/bin/i3-scrot -w") end,
+        {description = "capture a screenshot of active window", group = "hotkeys"}),
+    awful.key({"Shift" }, "XF86Eject", function () awful.util.spawn_with_shell("sleep 0.2 && /usr/bin/i3-scrot -s") end,
+        {description = "capture a screenshot of selection", group = "hotkeys"}),
+
+    -- audio control
+    awful.key({ }, "XF86AudioRaiseVolume", function () awful.spawn("pulseaudio-ctl up")
+        naughty.notify({ title = "Volume", text = "up", icon = "/usr/share/icons/Arc/apps/32/multimedia-volume-control.png", timeout = 0.5 }) end,
         {description = "volume up", group = "hotkeys"}),
-    awful.key({ }, "XF86AudioLowerVolume",
-        function ()
-            os.execute("pulseaudio-ctl down")
-            naughty.notify({ title = "Volume", text = "down", icon = "/usr/share/icons/Arc/apps/64/multimedia-volume-control.png", timeout = 0.5 })
-            --os.execute(string.format("amixer -q set %s 10%%-", beautiful.volume.channel))
-            --beautiful.volume.update()
-        end,
+    awful.key({ }, "XF86AudioLowerVolume", function () awful.spawn("pulseaudio-ctl down")
+        naughty.notify({ title = "Volume", text = "down", icon = "/usr/share/icons/Arc/apps/32/multimedia-volume-control.png", timeout = 0.5 }) end,
         {description = "volume down", group = "hotkeys"}),
-    awful.key({ }, "XF86AudioMute",
-        function ()
-            os.execute("pulseaudio-ctl mute")
-            naughty.notify({ title = "Volume", text = "mute/unmute", icon = "/usr/share/icons/Arc/apps/64/multimedia-volume-control.png", timeout = 0.5 })
-            --os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
-            --beautiful.volume.update()
-        end,
+    awful.key({ }, "XF86AudioMute", function () awful.spawn("pulseaudio-ctl mute")
+        naughty.notify({ title = "Volume", text = "mute/unmute", icon = "/usr/share/icons/Arc/apps/32/multimedia-volume-control.png", timeout = 0.5 }) end,
         {description = "toggle mute", group = "hotkeys"}),
 
-    -- Copy primary to clipboard (terminals to gtk)
-    --awful.key({ modkey }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,
-    --          {description = "copy terminal to gtk", group = "hotkeys"}),
-    -- Copy clipboard to primary (gtk to terminals)
-    --awful.key({ modkey }, "v", function () awful.spawn.with_shell("xsel -b | xsel") end,
-    --          {description = "copy gtk to terminal", group = "hotkeys"}),
+    -- media control
+    awful.key({ }, "XF86AudioPrev", function () awful.spawn("playerctl previous")
+        naughty.notify({ title = "Media Player", text = "previous", icon = "/usr/share/icons/Arc/actions/24/gtk-media-previous-ltr.png", timeout = 0.5 }) end,
+        {description = "play previous", group = "hotkeys"}),
+    awful.key({ }, "XF86AudioNext", function () awful.spawn("playerctl next")
+        naughty.notify({ title = "Media Player", text = "next", icon = "/usr/share/icons/Arc/actions/24/gtk-media-next-ltr.png", timeout = 0.5 }) end,
+        {description = "play next", group = "hotkeys"}),
+    awful.key({ }, "XF86AudioPlay", function () awful.spawn("playerctl play-pause")
+        naughty.notify({ title = "Media Player", text = "play", icon = "/usr/share/icons/Arc/actions/24/gtk-media-play-ltr.png", timeout = 0.5 }) end,
+        {description = "play/pause", group = "hotkeys"}),
 
-    -- User programs
-    awful.key({ modkey }, "b", function () awful.spawn(browser) end,
-              {description = "run browser", group = "launcher"}),
-    --awful.key({ modkey }, "a", function () awful.spawn(guieditor) end,
-    --          {description = "run gui editor", group = "launcher"}),
-    -- Default
-    --[[ Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
-    --]]
-    --[[ dmenu
-    awful.key({ modkey }, "x", function ()
-            os.execute(string.format("dmenu_run -i -fn 'Monospace' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
-            beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
-        end,
-        {description = "show dmenu", group = "launcher"})
-    --]]
+    -- X screen locker
+    awful.key({ modkey }, "F1", function () os.execute(scrlocker) end,
+              {description = "lock screen", group = "hotkeys"}),
 
-    -- XF86LaunchA
-    -- XF86LaunchB
-    -- XF86Eject
-    -- XF86Tools
-    -- XF86Launch5
-    -- XF86Launch6
-    -- XF86Launch7
-    -- XF86Launch8
-    -- XF86Launch9
-
-    -- Menubar
-    awful.key({ }, "XF86AudioPrev",
-        function ()
-            awful.spawn("playerctl previous")
-        end,
-        {description = "play previous", group = "launcher"}),
-
-    awful.key({ }, "XF86AudioNext",
-        function ()
-            awful.spawn("playerctl next")
-        end,
-        {description = "play next", group = "launcher"}),
-
-    awful.key({ }, "XF86AudioPlay",
-        function ()
-            if spplaying then
-                awful.spawn("playerctl play-pause")
-                naughty.notify({ title = "play", icon = "/usr/share/icons/Arc/actions/24/player_play.png", timeout = 3 })
-            else
-                awful.spawn("playerctl play-pause")
-                naughty.notify({ title = "pause", icon = "/usr/share/icons/Arc/actions/24/player_pause.png", timeout = 3 })
-            end
-            spplaying = not spplaying
-        end,
-        {description = "play/pause", group = "launcher"}),
-
-    -- Menubar
+    -- menubar
     awful.key({ modkey }, "space", function () awful.spawn("/usr/bin/rofi -show drun -modi window,drun,run,find:~/.config/rofi/finder.sh") end,
-    --awful.key({ modkey }, "space", function () awful.spawn("/usr/bin/rofi -show drun -modi window,combi,drun") end,
               {description = "launch rofi", group = "launcher"}),
-    -- awful.key({ modkey }, "space", function() menubar.show() end,
-    --     {description = "show the menubar", group = "launcher"}),
 
-    -- Prompt
+    -- prompt
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"})
 
-    -- awful.key({ modkey }, "x",
-    --           function ()
-    --               awful.prompt.run {
-    --                 prompt       = "Run Lua code: ",
-    --                 textbox      = awful.screen.focused().mypromptbox.widget,
-    --                 exe_callback = awful.util.eval,
-    --                 history_path = awful.util.get_cache_dir() .. "/history_eval"
-    --               }
-    --           end,
-    --           {description = "lua execute prompt", group = "awesome"})
-    --]]
 )
 
 clientkeys = my_table.join(
@@ -613,7 +527,6 @@ awful.rules.rules = {
     { rule = { name = "galculator" },
       properties = { floating = true } },
 
-
     -- Set Firefox to always map on the first tag on screen 1.
     { rule = { class = "firefox" },
       -- properties = { screen = 1, tag = awful.util.tagnames[1] } },
@@ -706,8 +619,4 @@ client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("focus", border_adjust)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 
--- possible workaround for tag preservation when switching back to default screen:
--- https://github.com/lcpz/awesome-copycats/issues/251
--- }}}
 awful.spawn.with_shell("~/.config/awesome/autorun.sh")
-

@@ -20,6 +20,10 @@ if [ -d "/usr/local/cocotb-1.1.0" ]; then
     export COCOTB="/usr/local/cocotb-1.1.0"
 fi
 
+if [ -d "/opt/Quartus/19.1" ]; then
+    export QSYS_ROOTDIR="/opt/Quartus/19.1/quartus/sopc_builder/bin"
+fi
+
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 export EDITOR=vim

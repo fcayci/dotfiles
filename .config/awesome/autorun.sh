@@ -35,7 +35,7 @@ run thunar --daemon
 #run pamac-tray
 run pasystray
 run xrandr --output HDMI-1 --primary --auto --output HDMI-2 --left-of HDMI-1 --auto
-setxkbmap -layout "us,tr"
+setxkbmap -layout "us,tr" -option grp:shift_caps_toggle
 run blueman-applet
 run clipit
 run unclutter --timeout 2 --ignore-scrolling

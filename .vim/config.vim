@@ -56,7 +56,7 @@ nnoremap N Nzzzv
 "autocmd BufWritePre * %s/\s\+$//e
 augroup TrailingSpaces
     autocmd!
-    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
+    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp,lua} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
 augroup END
 
 " Toggle dark/light default color theme for shitty terms

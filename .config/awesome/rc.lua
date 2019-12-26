@@ -341,12 +341,14 @@ globalkeys = my_table.join(
         {description = "zettlr", group = "launcher"}),
     awful.key({ }, "XF86LaunchB", function () awful.spawn("lxterminal -e htop") end,
         {description = "show htop", group = "launcher"}),
-    awful.key({ }, "XF86Tools", function () awful.spawn("thunar /tank/readings") end,
+    awful.key({ }, "XF86Tools", function () awful.spawn("/usr/bin/polar-bookshelf") end,
         {description = "show readings", group = "launcher"}),
-    awful.key({ }, "XF86Launch5", function () awful.spawn("thunar /tank/courses") end,
+    awful.key({ }, "XF86Launch5", function () awful.spawn("thunar /tank/readings") end,
+        {description = "show readings", group = "launcher"}),
+    awful.key({ }, "XF86Launch6", function () awful.spawn("thunar /tank/courses") end,
         {description = "show courses", group = "launcher"}),
-    awful.key({ }, "XF86Launch6", function () awful.spawn("thunar /tank/tablet") end,
-        {description = "show courses", group = "launcher"}),        
+    awful.key({ }, "XF86Launch7", function () awful.spawn("thunar /tank/tablet") end,
+        {description = "show courses", group = "launcher"}),
 
     -- screenshot
     awful.key({ modkey }, "XF86Eject", function () awful.spawn("/usr/bin/i3-scrot -d") end,

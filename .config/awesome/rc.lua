@@ -341,7 +341,7 @@ globalkeys = my_table.join(
         {description = "zettlr", group = "launcher"}),
     awful.key({ }, "XF86LaunchB", function () awful.spawn("lxterminal -e htop") end,
         {description = "show htop", group = "launcher"}),
-    awful.key({ }, "XF86Tools", function () awful.spawn("/usr/bin/polar-bookshelf") end,
+    awful.key({ }, "XF86Tools", function () awful.spawn("/usr/bin/mendeleydesktop") end,
         {description = "show readings", group = "launcher"}),
     awful.key({ }, "XF86Launch5", function () awful.spawn("thunar /tank/readings") end,
         {description = "show readings", group = "launcher"}),

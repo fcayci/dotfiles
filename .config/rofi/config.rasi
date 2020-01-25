@@ -1,15 +1,11 @@
+/* Rofi config file */
 configuration {
-    combi-modi:       "window,drun,run";
-    scroll-method:    1;
-    font:             "hack 10";
-    display-ssh:      "ssh";
-    display-run:      "#! ";
-    display-drun:     "open";
-    display-window:   "switch";
-    display-combi:    "go to";
-    show-icons:       true;
-    location:         2;
-    sidebar-mode:     true;
+    lines: 12;
+    font: "hack 10";
+    show-icons: true;
+    theme: "oxide";
+    display-window: "Window";
+    display-drun: "Search";
+    sidebar-mode: true;
+    location: 0;
 }
-
-@import "/usr/share/rofi/themes/gruvbox-dark.rasi"

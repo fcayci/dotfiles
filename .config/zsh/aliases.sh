@@ -5,6 +5,8 @@ alias sysinfo="inxi -F"
 alias open="xdg-open"
 alias ifconfig="ip address"
 alias diff='diff --color=auto'
+alias cs='xclip -selection clipboard'
+alias vs='xclip -o -selection clipboard'
 
 # macbook specific
 alias morepower="sudo cpupower frequency-set -g performance && cpupower frequency-info"

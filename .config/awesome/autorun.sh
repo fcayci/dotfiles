@@ -34,12 +34,12 @@ run thunar --daemon
 #run pa-applet
 #run pamac-tray
 run pasystray
-run xrandr --output HDMI-1 --primary --auto --output HDMI-2 --left-of HDMI-1 --auto
+#run xrandr --output HDMI-1 --primary --auto --output HDMI-2 --left-of HDMI-1 --auto
 setxkbmap -layout "us,tr" -option grp:shift_caps_toggle
 run blueman-applet
 run clipit
 run unclutter --timeout 2 --ignore-scrolling
-run syncthing
-run mailspring
+#run syncthing
+#run mailspring
 #run ~/.dropbox-dist/dropboxd
 #run msm_notifier

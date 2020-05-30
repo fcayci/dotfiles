@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Books directory
-BOOKS_DIR="/tank/dropbox/ebooks /tank/dropbox/articles /tank/dropbox/armclass/docs"
+BOOKS_DIR="/tank/ebooks"
 
 # Save find result to F_ARRAY
 readarray -t F_ARRAY <<< "$(find $BOOKS_DIR -type f -name '*.pdf')"
@@ -35,7 +35,11 @@ gen_list
 
 if [ ! -z "$@" ]
 then
-    coproc (exo-open "${BOOKS[$@]}" > /dev/null 2>&1 )
-    #exec 1>&-
+    if [ -f "$@" ]
+    then
+        #coproc (exo-open "${BOOKS[$@]}" > /dev/null 2>&1 )
+        #exec 1>&-
+        exit;
+    fi
     exit;
 fi

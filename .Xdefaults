@@ -1,0 +1,146 @@
+!! Nord
+
+#define nord0 #2E3440
+#define nord1 #3B4252
+#define nord2 #434C5E
+#define nord3 #4C566A
+#define nord4 #D8DEE9
+#define nord5 #E5E9F0
+#define nord6 #ECEFF4
+#define nord7 #8FBCBB
+#define nord8 #88C0D0
+#define nord9 #81A1C1
+#define nord10 #5E81AC
+#define nord11 #BF616A
+#define nord12 #D08770
+#define nord13 #EBCB8B
+#define nord14 #A3BE8C
+#define nord15 #B48EAD
+
+*.foreground:   nord4
+*.background:   nord0
+*.cursorColor:  nord4
+*fading: 35
+*fadeColor: nord3
+
+*.color0: nord1
+*.color1: nord11
+*.color2: nord14
+*.color3: nord13
+*.color4: nord9
+*.color5: nord15
+*.color6: nord8
+*.color7: nord5
+*.color8: nord3
+*.color9: nord11
+*.color10: nord14
+*.color11: nord13
+*.color12: nord9
+*.color13: nord15
+*.color14: nord7
+*.color15: nord6
+
+!! Colorscheme
+
+! special
+!*.foreground: #93a1a1
+!*.background: #141c21
+!*.cursorColor: #afbfbf
+
+! black
+!*.color0: #263640
+!*.color8: #4a697d
+
+! red
+!*.color1: #d12f2c
+!*.color9: #fa3935
+
+! green
+!*.color2: #819400
+!*.color10: #a4bd00
+
+! yellow
+!*.color3: #b08500
+!*.color11: #d9a400
+
+! blue
+!*.color4: #2587cc
+!*.color12: #2ca2f5
+
+! magenta
+!*.color5: #696ebf
+!*.color13: #8086e8
+
+! cyan
+!*.color6: #289c93
+!*.color14: #33c5ba
+
+! white
+!*.color7: #bfbaac
+!*.color15: #fdf6e3
+
+Xft*dpi:                    96
+Xft*antialias:              true
+Xft*hinting:                full
+!Xft.hinting:                false
+!Xft.hintstyle:              hintslight
+
+! URXVT Settings
+URxvt.perl-ext-common: tabbed
+
+! dont scroll with the output
+URxvt*scrollTtyOutput: false
+! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt*scrollWithBuffer: true
+! scroll back to the bottom on keypress
+URxvt*scrollTtyKeypress: true
+! disable scrollback buffer for the secondary screen
+URxvt.secondaryScreen: 1
+URxvt.secondaryScroll: 0
+
+URxvt*saveLines: 12000
+
+! Disable printing the terminal contents when pressing PrintScreen.
+URxvt.print-pipe: "cat > /dev/null"
+
+!URxvt.clipboard.autocopy: true
+!URxvt.keysym.Shift-Control-c: perl:clipboard:copy
+URxvt.keysym.Shift-Control-C: eval:selection-to-clipboard
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+
+URxvt.tabbed.tabbar-fg: 2
+URxvt.tabbed.tabbar-bg: 0
+URxvt.tabbed.tab-fg: 4
+URxvt.tabbed.tab-bg: 0
+
+!URxvt.depth:                32
+!URxvt.loginShell:           true
+!URxvt.internalBorder:       3
+!URxvt.lineSpace:            0
+
+!URxvt*font:            xft:Dejavu Sans Mono for Powerline:size=14
+!URxvt*font:            xft:Inconsolata for Powerline:size=12
+!URxvt*font:            xft:Noto Mono for Powerline:size=10
+URxvt*font:            xft:Source Code Pro for Powerline:size=10
+!URxvt*font:            xft:Terminus:pixelsize=12,xft:Roboto Mono for Powerline:pixelsize=10
+!URxvt*font:            xft:Terminus:pixelsize=14
+!URxvt*boldFont:        xft:Terminus:bold:pixelsize=12
+!URxvt.font: xft:Consolas:size=13, xft:Inconsolata for Powerline
+!URxvt*font: xft:Terminus:pixelsize=12,xft:Inconsolata\ for\ Powerline:pixelsize=12
+
+!URxvt.letterSpace: 0
+!URxvt.lineSpace: 0
+!URxvt.internalBorder: 24
+!URxvt.cursorBlink: true
+!URxvt.cursorUnderline: false
+URxvt.scrollBar: false
+URxvt.scrollBar_right: false
+!URxvt.urgentOnBell: true
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
+!URxvt.perl-ext-common:  clipboard
+!URxvt.clipboard.autocopy: true
+!URxvt.keysym.Shift-Conrol-c: perl:clipboard:copy
+!URxvt.keysym.Shift-Control-v: perl:clipboard:paste
+

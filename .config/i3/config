@@ -2,10 +2,12 @@ set $mod Mod4
 
 font -xos4-terminus-medium-r-normal--12-120-72-72-C-60-iso10646-1
 
+exec --no-startup-id echo "$0: DESKTOP_AUTOSTART_ID $DESKTOP_AUTOSTART_ID, registering with org.gnome.SessionManager"
+exec --no-startup-id dbus-send --session --print-reply=literal --dest=org.gnome.SessionManager "/org/gnome/SessionManager" org.gnome.SessionManager.RegisterClient "string:i3" "string:$DESKTOP_AUTOSTART_ID"
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id feh --bg-scale .walls/01.png
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-exec --no-startup-id xautolock -detectsleep -time 5 -locker i3lock -f -t -i ~/.walls/02.png -notify 10 -notifier "notify-send -u critical -t 10000 -- 'Screen will be locked in 10 seconds'"
+exec --no-startup-id xautolock -detectsleep -time 5 -locker "i3lock -f -t -i ~/.walls/02.png" -notify 10 -notifier "notify-send -u critical -t 10000 -- 'Screen will be locked in 10 seconds'"
 #exec --no-startup-id clipit
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id nm-applet

@@ -1,0 +1,6 @@
+# Save all attachments
+#
+macro pager S "<pipe-message> ripmime -i - -d ~/downs && rm ~/downs/textfile*" "Save all non-text attachments using ripmime"
+# opening urls with urlscan
+macro pager \cu "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
+

@@ -7,16 +7,7 @@ general {
   interval = 5
 }
 
-order += "ethernet _first_"
 order += "tztime local"
-
-volume master {
-  format = " %volume"
-  format_muted = " Muted"
-  device = "default"
-  mixer = "Master"
-  mixer_idx = 0
-}
 
 read_file BRIGHTNESS {
   format = "BRI %content%"
@@ -24,46 +15,6 @@ read_file BRIGHTNESS {
   max_characters = 5
 }
 
-cpu_usage {
-  format= " %cpu0 %cpu1 %cpu2 %cpu3"
-  max_threshold= 75
-}
-
-wireless _first_ {
-  format_up = "W (%quality at %essid, %bitrate) %ip"
-  format_down = ""
-}
-
-ethernet _first_ {
-  format_up = "E: %ip (%speed)"
-  format_down = "E: down"
-}
-
-battery all {
-  format = "%status %percentage %remaining %emptytime"
-  format_down = ""
-  status_chr = "CHR"
-  status_bat = "BAT"
-  status_unk = "UNK"
-  status_full = "FULL"
-  path = "/sys/class/power_supply/BAT%d/uevent"
-  low_threshold = 10
-}
-
 tztime local {
-  format = " %a, %d %B at %I %M %p"
-}
-
-load {
-  format = " %5min"
-}
-
-memory {
-  format = " %percentage_used"
-  threshold_degraded = "10%"
-  format_degraded = " LOW: %free"
-}
-
-disk "/" {
-  format = " %percentage_used"
+  format = " %a, %d %B %I:%M %p"
 }

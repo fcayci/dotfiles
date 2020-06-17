@@ -11,11 +11,10 @@ order += "cpu_usage"
 #order += "disk /"
 order += "memory"
 order += "load"
-#order += "wireless _first_"
-#order += "ethernet _first_"
-#order += "battery all"
 order += "volume master"
 order += "tztime local"
+order += "wireless _first_"
+order += "ethernet _first_"
 
 volume master {
   format = " %volume"
@@ -37,28 +36,17 @@ cpu_usage {
 }
 
 wireless _first_ {
-  format_up = "W (%quality at %essid, %bitrate) %ip"
+  format_up = "%essid"
   format_down = ""
 }
 
 ethernet _first_ {
-  format_up = "E: %ip (%speed)"
-  format_down = "E: down"
-}
-
-battery all {
-  format = "%status %percentage %remaining %emptytime"
+  format_up = "%ip"
   format_down = ""
-  status_chr = "CHR"
-  status_bat = "BAT"
-  status_unk = "UNK"
-  status_full = "FULL"
-  path = "/sys/class/power_supply/BAT%d/uevent"
-  low_threshold = 10
 }
 
 tztime local {
-  format = " %a, %d %B at %I %M %p"
+  format = " %a, %d %B %I:%M %p"
 }
 
 load {

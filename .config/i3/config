@@ -4,7 +4,7 @@ font -xos4-terminus-medium-r-normal--12-120-72-72-C-60-iso10646-1
 
 exec --no-startup-id echo "$0: DESKTOP_AUTOSTART_ID $DESKTOP_AUTOSTART_ID, registering with org.gnome.SessionManager"
 exec --no-startup-id dbus-send --session --print-reply=literal --dest=org.gnome.SessionManager "/org/gnome/SessionManager" org.gnome.SessionManager.RegisterClient "string:i3" "string:$DESKTOP_AUTOSTART_ID"
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id feh --bg-scale .walls/01.png
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id xautolock -detectsleep -time 5 -locker "i3lock -f -t -i ~/.walls/02.png" -notify 10 -notifier "notify-send -u critical -t 10000 -- 'Screen will be locked in 10 seconds'"
@@ -140,3 +140,20 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+bar {
+    font pango:Ubuntu Condensed 8
+    status_command i3status
+    position top
+    output primary
+    tray_output primary
+    separator_symbol " "
+    tray_padding 0
+    colors {
+        statusline #d8dee9
+        background #2e3440
+        focused_workspace  #d8dee9 #d8dee9 #2e3440
+        inactive_workspace #3b4252 #3b4252 #d8dee9
+        active_workspace   #4c566a #4c566a #d8dee9
+        urgent_workspace   #bf616a #bf616a #d8dee9
+    }
+}

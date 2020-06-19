@@ -4,11 +4,9 @@ font -xos4-terminus-medium-r-normal--12-120-72-72-C-60-iso10646-1
 
 exec --no-startup-id echo "$0: DESKTOP_AUTOSTART_ID $DESKTOP_AUTOSTART_ID, registering with org.gnome.SessionManager"
 exec --no-startup-id dbus-send --session --print-reply=literal --dest=org.gnome.SessionManager "/org/gnome/SessionManager" org.gnome.SessionManager.RegisterClient "string:i3" "string:$DESKTOP_AUTOSTART_ID"
-#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec --no-startup-id feh --bg-scale .walls/01.png
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 exec --no-startup-id xautolock -detectsleep -time 5 -locker "i3lock -f -t -i ~/.walls/02.png" -notify 10 -notifier "notify-send -u critical -t 10000 -- 'Screen will be locked in 10 seconds'"
-#exec --no-startup-id clipit
 exec --no-startup-id xfce4-power-manager
 exec_always --no-startup-id nm-applet
 exec --no-startup-id syncthing
@@ -37,8 +35,8 @@ bindsym $mod+t exec thunar
 bindsym XF86LaunchA exec /opt/dynalist/dynalist
 bindsym $mod+XF86LaunchA exec zotero
 bindsym XF86LaunchB exec kitty -e htop
-bindsym Shift+XF86Eject exec scrot -s
-bindsym Control+XF86Eject exec scrot
+bindsym --release shift+XF86Eject exec "scrot -a $(slop -f '%x,%y,%w,%h')"
+bindsym control+XF86Eject exec scrot
 bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPlay exec playerctl play-pause
@@ -126,12 +124,6 @@ bindsym $mod+Control+e exec "i3-nagbar -t warning -m 'You madlad! Sure about thi
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-    # These bindings trigger as soon as you enter the resize mode
-
-    # Pressing left will shrink the window’s width.
-    # Pressing right will grow the window’s width.
-    # Pressing up will shrink the window’s height.
-    # Pressing down will grow the window’s height.
     bindsym Left resize shrink width 10 px or 10 ppt
     bindsym Down resize grow height 10 px or 10 ppt
     bindsym Up resize shrink height 10 px or 10 ppt
@@ -150,13 +142,13 @@ bar {
   position top
   output primary
   tray_output primary
-  font pango:Ubuntu Condensed 8
-  separator_symbol " "
+  font pango:Source Code Pro-10 8
+  separator_symbol "  "
   tray_padding 0
   colors {
     statusline    #d8dee9
     background    #2e3440
-    separator     #0000ff
+    separator     #4c566a
       #                  BORDER      BACKGROUND    TEXT
     focused_workspace   #d8dee9      #d8dee9     #2e3440
     inactive_workspace  #3b4252      #3b4252     #d8dee9
@@ -171,12 +163,12 @@ bar {
   status_command i3status --config ~/.config/i3status/config-sec
   position top
   tray_output none
-  font pango:Ubuntu Condensed 8
-  separator_symbol " "
+  font pango:Source Code Pro-10 8
+  separator_symbol "  "
   colors {
     statusline    #d8dee9
     background    #2e3440
-    separator     #0000ff
+    separator     #4c566a
       #                  BORDER      BACKGROUND    TEXT
     focused_workspace   #d8dee9      #d8dee9     #2e3440
     inactive_workspace  #3b4252      #3b4252     #d8dee9

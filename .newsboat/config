@@ -1,0 +1,34 @@
+# newsboat config
+
+browser  firefox
+
+datetime-format "%m/%d"
+article-sort-order date-asc
+articlelist-format "%4i %f %D %t"
+itemview-title-format "%T"
+articlelist-title-format "%T [%u/%t]"
+feedlist-title-format "Feeds [%u/%t]"
+feedlist-format " %n %11u -%< %t"
+
+cookie-cache "~/.newsboat/cookies.txt"
+error-log "~/.newsboat/error.log"
+auto-reload yes
+# keep-articles-days 30
+# external-url-viewer "urlview"
+openbrowser-and-mark-jumps-to-next-unread yes
+goto-next-feed no
+
+bind-key j next
+bind-key k prev
+bind-key J next-feed
+bind-key K prev-feed
+bind-key g home
+bind-key G end
+
+bind-key d delete-article
+bind-key D purge-deleted
+bind-key o open-in-browser-and-mark-read
+#bind-key O open-in-browser
+bind-key S sort
+
+macro y set browser "mpv %u"; open-in-browser ; set browser "firefox %u"

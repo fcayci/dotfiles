@@ -7,6 +7,7 @@ general {
   interval = 5
 }
 
+order += "cpu_temperature 0"
 order += "cpu_usage"
 #order += "disk /tank"
 order += "memory"
@@ -24,15 +25,15 @@ volume master {
   mixer_idx = 0
 }
 
-read_file TEMPERATURE {
-  format = " %content%"
-  path = "/home/user_name/.config/brightness"
-  max_characters = 5
+cpu_usage {
+  format = " %usage"
+  max_threshold = 75
 }
 
-cpu_usage {
-  format= " %cpu0 %cpu1 %cpu2 %cpu3"
-  max_threshold= 75
+cpu_temperature 0 {
+  format = " %degrees °C"
+  max_threshold = 65
+  path = "/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input"
 }
 
 wireless _first_ {

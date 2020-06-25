@@ -4,13 +4,15 @@
 " Plugins
 "
 
-"
 " preservim/nerdtree
 map <F2> :NERDTreeToggle<CR>
 
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+let NERDTreeIgnore=['\.pyc$', '\~$']
+
 
 " itchyny/lightline.vim
 set noshowmode
@@ -74,18 +76,15 @@ function! LightlineFilename()
        \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
 endfunction
 
-"
+
 " preservim/nerdcommenter
-" Add spaces after comment delimiters
 let g:NERDSpaceDelims = 1
+let g:NERDDefaultAlign = 'left'
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDToggleCheckAllLines = 1
 
-"
-" ale
-" dense-analysis/ale
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 0
 
-"
 " junegunn/fzf 
 " junegunn/fzf.vim
 
@@ -119,12 +118,51 @@ command! -bang -nargs=* Ag
 
 " open files
 map ; :Files<CR>
-nnoremap <leader>t :call fzf#vim#files(FindRootDirectory())<CR>
 
 " Zettelkasten work flow
 let g:zettelkasten = "/tank/notebooks/"
 
 command! -nargs=1 NewNote :execute ":e" zettelkasten . strftime("%Y%m%d%H%M") . "-<args>.md"
+
+
+" neoclide/coc.nvim
+" Use tab for trigger completion with characters ahead and navigate.
+" use <tab> for trigger completion and navigate to the next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
 "
 " Configurations
@@ -132,7 +170,6 @@ command! -nargs=1 NewNote :execute ":e" zettelkasten . strftime("%Y%m%d%H%M") . 
 
 set tags=./tags,tags;$HOME
 
-"syntax enable
 colorscheme nord
 
 filetype on
@@ -152,11 +189,11 @@ set ttyfast
 set viminfo=
 set updatetime=250
 
+" UI configs
 if has("gui_running")
   set mouse=a
 endif
 
-" UI
 set ffs=unix,dos,mac
 set gfn=Source\ Code\ Pro\ Regular\ 12
 set guioptions-=m
@@ -172,22 +209,19 @@ set noshowmode
 set novisualbell
 set number
 set ruler
-"set rulerformat=%l/%L(%p%%),%c   " a better ruler
 set t_vb=
 set tm=500
 set wildmenu
 set wildignore=*~,*.pyc
 set wildignore+=*/.git/*,*/.hg/*,*/.svn/*
 
-"+--- Editor ---+
-set autoindent
+" Editor configs
 set backspace=indent,eol,start
 set cursorline
-set colorcolumn=160
+"set colorcolumn=160
 set foldcolumn=1
 set foldenable
 set foldlevelstart=10
-"set guicursor=a:ver25-Cursor/lCursor
 set linebreak
 set list
 "set listchars=tab:→ ,space:·
@@ -203,8 +237,8 @@ set showmatch
 set splitbelow splitright " More intuitive than default split behavior
 set nojoinspaces          " Use only one space after period when joining lines
 
-" Toggle the sign column automatically when there are signs available to display.
 set signcolumn=auto
+set autoindent
 set smartindent
 set smarttab
 set softtabstop=4 " (sts)
@@ -218,20 +252,11 @@ set expandtab " fill with spaces
 set whichwrap+=<,>,h,l,[,]
 set wrap
 
-"+--- Search ---+
+" Search configs
 set ignorecase
 "set smartcase
 set hlsearch
 set incsearch
-
-" Shows syntax highlighting groups for the current cursor position
-nmap <C-S-K> :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
 
 "search will center on the line it is found in
 nnoremap n nzzzv
@@ -244,16 +269,17 @@ augroup TrailingSpaces
     autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp,lua} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
 augroup END
 
+
 " Open buffer
 nnoremap gb :ls<CR>:b<space>
-set pastetoggle=<F3>
-map <F4> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
+map <F3> :TlistToggle<CR>
+"map <F4> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
 nnoremap <F5> :set nonumber!<CR>:set foldcolumn=0<CR>
-map <F7> :TlistToggle<CR>
+set pastetoggle=<F7>
 map <F10> <ESC>ggg?G``
 
 " Compile and run keymappings
-au FileType python map <F6> :!python3 %<CR>
+au FileType python map <F6> :!python %<CR>
 au FileType html,xhtml map <F6> :!firefox %<CR>
 au FileType tex map <F6> :!texi2pdf -c %<CR>
 

@@ -282,6 +282,7 @@ map <F10> <ESC>ggg?G``
 au FileType python map <F6> :!python %<CR>
 au FileType html,xhtml map <F6> :!firefox %<CR>
 au FileType tex map <F6> :!texi2pdf -c %<CR>
+au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf<CR>
 
 " mutt
 au BufRead /tmp/mutt-* setlocal fo+=aw

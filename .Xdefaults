@@ -92,7 +92,8 @@ URxvt.tabbed.tab-bg: 0
 !URxvt*font:            xft:Dejavu Sans Mono for Powerline:size=14
 !URxvt*font:            xft:Inconsolata for Powerline:size=12
 !URxvt*font:            xft:Noto Mono for Powerline:size=10
-URxvt*font:            xft:Source Code Pro for Powerline:size=10
+URxvt*font:            xft:Source Code Pro:size=10
+!URxvt*font:            xft:Source Code Pro for Powerline:size=10
 !URxvt*font:            xft:Terminus:pixelsize=12,xft:Roboto Mono for Powerline:pixelsize=10
 !URxvt*font:            xft:Terminus:pixelsize=14
 !URxvt*boldFont:        xft:Terminus:bold:pixelsize=12

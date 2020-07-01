@@ -60,7 +60,7 @@ set fast_reply
 set reverse_name
 set include
 set reply_regexp = "^((re|ynt)(\[[0-9]+\])*:[ \t]*)*"
-set text_flowed = yes
+set text_flowed
 
 # Abook ---------------------------------------------------------------
 set query_command  = "abook --mutt-query '%s'"

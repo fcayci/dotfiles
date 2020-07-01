@@ -200,7 +200,7 @@ set guioptions-=m
 set guioptions-=T
 set guioptions-=r
 set guioptions-=L
-set termguicolors
+"set termguicolors
 set hidden
 set laststatus=2
 set lazyredraw

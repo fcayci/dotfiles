@@ -209,6 +209,7 @@ set noshowmode
 set novisualbell
 set number
 set ruler
+set relativenumber
 set t_vb=
 set tm=500
 set wildmenu
@@ -262,6 +263,11 @@ set incsearch
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+
 " Remove trailing whitespace on save
 "autocmd BufWritePre * %s/\s\+$//e
 augroup TrailingSpaces
@@ -282,7 +288,7 @@ map <F10> <ESC>ggg?G``
 au FileType python map <F6> :!python %<CR>
 au FileType html,xhtml map <F6> :!firefox %<CR>
 au FileType tex map <F6> :!texi2pdf -c %<CR>
-au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf<CR>
+au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf&<CR>
 
 " mutt
 au BufRead /tmp/mutt-* setlocal fo+=aw

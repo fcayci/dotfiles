@@ -10,6 +10,9 @@ articlelist-title-format "%T [%u/%t]"
 feedlist-title-format "Feeds [%u/%t]"
 feedlist-format " %n %11u -%< %t"
 
+color listfocus           white blue   bold
+color listfocus_unread    white blue   bold
+
 cookie-cache "~/.newsboat/cookies.txt"
 error-log "~/.newsboat/error.log"
 auto-reload yes

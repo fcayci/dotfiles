@@ -90,7 +90,7 @@ let g:NERDToggleCheckAllLines = 1
 
 " For inserting links for zettel
 " make_note_link: List -> Str
-" returned string: [Title](YYYYMMDDHH.md)
+" returned string: [Title](YYYYMMDDHH.rst)
 function! s:make_note_link(l)
   " fzf#vim#complete returns a list with all info in index 0
   let line = split(a:l[0], ':')
@@ -100,8 +100,8 @@ function! s:make_note_link(l)
   catch
     let ztk_title = substitute(l:line[1], '\#\+\s\+', '', 'g')
   endtry
-    let mdlink = "[" . ztk_title ."](". ztk_id .")"
-    return mdlink
+    let rstlink = "[" . ztk_title ."](". ztk_id .")"
+    return rstlink
 endfunction
 
 " mnemonic link zettel
@@ -122,7 +122,7 @@ map ; :Files<CR>
 " Zettelkasten work flow
 let g:zettelkasten = "/tank/notebooks/"
 
-command! -nargs=1 NewNote :execute ":e" zettelkasten . strftime("%Y%m%d%H%M") . "-<args>.md"
+command! -nargs=1 NewNote :execute ":e" zettelkasten . strftime("%Y%m%d%H%M") . "-<args>.rst"
 
 
 " neoclide/coc.nvim
@@ -272,15 +272,14 @@ nnoremap <C-l> <C-w>l
 "autocmd BufWritePre * %s/\s\+$//e
 augroup TrailingSpaces
     autocmd!
-    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp,lua} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
+    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp,lua,rst} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
 augroup END
-
 
 " Open buffer
 nnoremap gb :ls<CR>:b<space>
 map <F3> :TlistToggle<CR>
 "map <F4> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
-nnoremap <F5> :set nonumber!<CR>:set foldcolumn=0<CR>
+nnoremap <F5> :set nonumber!<CR>:set norelativenumber!<CR>:set foldcolumn=0<CR>
 set pastetoggle=<F7>
 map <F10> <ESC>ggg?G``
 
@@ -289,6 +288,9 @@ au FileType python map <F6> :!python %<CR>
 au FileType html,xhtml map <F6> :!firefox %<CR>
 au FileType tex map <F6> :!texi2pdf -c %<CR>
 au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf&<CR>
+au FileType rst map <F6> :!make html &> /dev/null&<CR><CR>
+
+autocmd BufWritePost *.rst silent! execute "!make html >/dev/null 2>&1" | redraw!
 
 " mutt
 au BufRead /tmp/mutt-* setlocal fo+=aw

@@ -1,4 +1,6 @@
 set $mod Mod4
+set $term kitty
+set $fm pcmanfm
 
 font pango:Source Code Pro-10 8
 
@@ -16,7 +18,6 @@ exec --no-startup-id setxkbmap -layout "us,tr" -option grp:shift_caps_toggle
 exec --no-startup-id picom --no-use-damage
 
 # Use pactl to adjust volume in PulseAudio.
-#set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
@@ -24,16 +25,17 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
+
 bindsym $mod+Shift+space floating toggle
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec $term
 
 bindsym $mod+space exec "rofi -show drun -modi window,drun,run,find:~/.config/rofi/finder.sh"
-bindsym $mod+t exec pcmanfm
-bindsym XF86LaunchA exec /opt/dynalist/dynalist
-bindsym $mod+XF86LaunchA exec zotero
-bindsym XF86LaunchB exec kitty -e htop
+bindsym $mod+t exec $fm
+bindsym XF86LaunchA exec "firefox --new-tab file:///tank/notebooks/_build/html/index.html"
+bindsym XF86LaunchB exec $term -e htop
+bindsym $mod+XF86LaunchB exec $fm /tank/docs/
 bindsym --release shift+XF86Eject exec "scrot -a $(slop -f '%x,%y,%w,%h')"
 bindsym control+XF86Eject exec scrot
 bindsym XF86AudioPrev exec playerctl previous
@@ -44,10 +46,22 @@ bindsym XF86AudioPlay exec playerctl play-pause
 bindsym $mod+Shift+c kill
 
 # Change focus
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+bindsym $mod+h focus left
+
+# Change focus, alternative keys
+#bindsym $mod+Left focus left
+#bindsym $mod+Down focus down
+#bindsym $mod+Up focus up
+#bindsym $mod+Right focus right
+
+# Move focus, alternative keys
+#bindsym $mod+j move down
+#bindsym $mod+k move up
+#bindsym $mod+l move right
+#bindsym $mod+h move left
 
 # Move focus
 bindsym $mod+Shift+Left move left
@@ -60,7 +74,7 @@ bindsym $mod+Shift+Right move right
 #bindsym $mod+Shift+m move workspace to output DP-5
 
 # split in horizontal orientation
-bindsym $mod+h split h
+bindsym $mod+b split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -120,6 +134,9 @@ bindsym $mod+p move workspace to output right
 bindsym $mod+Control+r reload
 bindsym $mod+Control+q restart
 bindsym $mod+Control+e exec "i3-nagbar -t warning -m 'You madlad! Sure about this?' -B 'Absolutely!' 'i3-msg exit'"
+
+# Telegram
+for_window [class="TelegramDesktop" instance="Telegram" title="Telegram.*$"] floating enable, resize set 1545 873, move scratchpad, border pixel 5
 
 for_window [window_role="About"] floating enable
 for_window [title="Microsoft Teams Notification"] floating enable

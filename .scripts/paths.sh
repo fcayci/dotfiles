@@ -32,6 +32,8 @@ export ARCHFLAGS="-arch x86_64"
 
 export PATH="$HOME/.local/bin:$PATH"
 
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+
 export PYTHONPATH=$PYTHONPATH:/usr/lib/python3.8:/usr/lib/python3.8/lib-dynload:/usr/lib/python3.8/site-packages
 
 # agent incoming

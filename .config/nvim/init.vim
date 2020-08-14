@@ -77,17 +77,10 @@ function! LightlineFilename()
 endfunction
 
 
-" preservim/nerdcommenter
-let g:NERDSpaceDelims = 1
-let g:NERDDefaultAlign = 'left'
-let g:NERDCommentEmptyLines = 1
-let g:NERDTrimTrailingWhitespace = 1
-let g:NERDToggleCheckAllLines = 1
-
-
 " junegunn/fzf 
 " junegunn/fzf.vim
 
+" FIXME change this to rst
 " For inserting links for zettel
 " make_note_link: List -> Str
 " returned string: [Title](YYYYMMDDHH.rst)
@@ -111,18 +104,33 @@ inoremap <expr> <c-l>z fzf#vim#complete({
   \ 'options': '--multi --reverse --margin 15%,0',
   \ 'up':    5})
 
-command! -bang -nargs=* Ag
-  \ call fzf#vim#grep(
-  \   'ag --column --numbers --noheading --color --smart-case '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
-
 " open files
 map ; :Files<CR>
 
 " Zettelkasten work flow
 let g:zettelkasten = "/tank/notebooks/"
 
-command! -nargs=1 NewNote :execute ":e" zettelkasten . strftime("%Y%m%d%H%M") . "-<args>.rst"
+" command! -nargs=1 NewNote :execute ":e" zettelkasten . strftime("%Y%m%d%H%M") . "-<args>.rst"
+command! -nargs=* Note call s:make_zettel_note(<f-args>)
+
+function! s:make_zettel_note(...)
+  " build the file name
+  let l:sep = ''
+  if len(a:000) > 0
+    let l:sep = '-'
+  endif
+  let l:fname = strftime("%Y%m%d%H%M") . l:sep . join(a:000, '-') . '.rst'
+
+  " edit the new file
+  execute "e " . g:zettelkasten . l:fname
+
+  " enter the title and timestamp (using ultisnips) in the new file
+  if len(a:000) > 0
+    exec "normal ggO.. \<c-r>=strftime('%Y-%m-%d %H:%M')\<cr> " . join(a:000) . "\<cr>\.. index::\<cr>\<cr>\<esc>40i=\<esc>o" . join(a:000) . "\<esc>G40i=\<esc>:\<esc>o\<cr>"
+  else
+    exec "normal ggO\<c-r>=strftime('%Y-%m-%d %H:%M')\<cr>\<cr>\<esc>G"
+  endif
+endfunction
 
 
 " neoclide/coc.nvim
@@ -267,6 +275,12 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
+
+" move lines up and down
+nnoremap <C-k> :<C-u>move-2<CR>==
+nnoremap <C-j> :<C-u>move+<CR>==
+xnoremap <C-k> :move-2<CR>='[gv
+xnoremap <C-j> :move'>+<CR>='[gv
 
 " Remove trailing whitespace on save
 "autocmd BufWritePre * %s/\s\+$//e

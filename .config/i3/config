@@ -11,11 +11,11 @@ exec --no-startup-id xfce4-power-manager
 exec_always --no-startup-id nm-applet
 exec --no-startup-id syncthing
 exec --no-startup-id xfsettingsd
-#exec --no-startup-id thunar --daemon
 exec --no-startup-id unclutter --timeout 2 --ignore-scrolling
 exec --no-startup-id setxkbmap -layout "us,tr" -option grp:shift_caps_toggle
 #exec --no-startup-id xrandr --output HDMI-1 --primary --auto --output HDMI-2 --left-of HDMI-1 --auto
 exec --no-startup-id picom --no-use-damage
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 
 # Use pactl to adjust volume in PulseAudio.
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -26,18 +26,31 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Toggle floating window
 bindsym $mod+Shift+space floating toggle
 
 # start a terminal
 bindsym $mod+Return exec $term
 
-bindsym $mod+space exec "rofi -show drun -modi window,drun,run,find:~/.config/rofi/finder.sh"
+# start file manager
 bindsym $mod+t exec $fm
+
+# search
+bindsym $mod+space exec "rofi -show drun -modi window,drun,run,find:~/.config/rofi/finder.sh"
+
+# misc controls
 bindsym XF86LaunchA exec "firefox --new-tab file:///tank/notebooks/_build/html/index.html"
+bindsym $mod+XF86LaunchA exec "$term -e vim /tank/notebooks/*-tasks.rst"
 bindsym XF86LaunchB exec $term -e htop
 bindsym $mod+XF86LaunchB exec $fm /tank/docs/
+
+bindsym XF86Launch6 exec "$term -e $editor +Note"
+
+# scrot
 bindsym --release shift+XF86Eject exec "scrot -a $(slop -f '%x,%y,%w,%h')"
 bindsym control+XF86Eject exec scrot
+
+# media
 bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPlay exec playerctl play-pause

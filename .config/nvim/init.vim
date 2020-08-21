@@ -124,6 +124,8 @@ function! s:make_zettel_note(...)
   " edit the new file
   execute "e " . g:zettelkasten . l:fname
 
+  setlocal fo+=aw
+
   " enter the title and timestamp (using ultisnips) in the new file
   if len(a:000) > 0
     exec "normal ggO.. \<c-r>=strftime('%Y-%m-%d %H:%M')\<cr> " . join(a:000) . "\<cr>\.. index::\<cr>\<cr>\<esc>40i=\<esc>o" . join(a:000) . "\<esc>G40i=\<esc>:\<esc>o\<cr>"
@@ -286,7 +288,7 @@ xnoremap <C-j> :move'>+<CR>='[gv
 "autocmd BufWritePre * %s/\s\+$//e
 augroup TrailingSpaces
     autocmd!
-    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp,lua,rst} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
+    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp,lua} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
 augroup END
 
 " Open buffer
@@ -308,3 +310,4 @@ autocmd BufWritePost *.rst silent! execute "!make html >/dev/null 2>&1" | redraw
 
 " mutt
 au BufRead /tmp/mutt-* setlocal fo+=aw
+au BufRead *.rst setlocal fo+=aw

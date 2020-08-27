@@ -279,24 +279,39 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 " move lines up and down
-nnoremap <C-k> :<C-u>move-2<CR>==
-nnoremap <C-j> :<C-u>move+<CR>==
-xnoremap <C-k> :move-2<CR>='[gv
-xnoremap <C-j> :move'>+<CR>='[gv
+"nnoremap <C-k> :<C-u>move-2<CR>==
+"nnoremap <C-j> :<C-u>move+<CR>==
+"xnoremap <C-k> :move-2<CR>='[gv
+"xnoremap <C-j> :move'>+<CR>='[gv
+
+" Spell Check
+let g:myLang=0
+let g:myLangList=["nospell","en_us","tr"]
+
+function! ToggleSpell()
+  let g:myLang=g:myLang+1
+  if g:myLang>=len(g:myLangList) | let g:myLang=0 | endif
+  if g:myLang==0
+    setlocal nospell
+  else
+    execute "setlocal spell spelllang=".get(g:myLangList, g:myLang)
+  endif
+  echo "spell checking language:" g:myLangList[g:myLang]
+endfunction
 
 " Remove trailing whitespace on save
 "autocmd BufWritePre * %s/\s\+$//e
 augroup TrailingSpaces
     autocmd!
-    autocmd BufWritePre *.{py,vhd,v,html,js,json,c,cpp,h,hpp,lua} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
+    autocmd BufWritePre *.{py,vhd,sv,v,html,js,json,c,cpp,h,hpp,lua} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
 augroup END
 
 " Open buffer
 nnoremap gb :ls<CR>:b<space>
 map <F3> :TlistToggle<CR>
-"map <F4> :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
 nnoremap <F5> :set nonumber!<CR>:set norelativenumber!<CR>:set foldcolumn=0<CR>
-set pastetoggle=<F7>
+nmap <silent> <F7> :call ToggleSpell()<CR>
+set pastetoggle=<F8>
 map <F10> <ESC>ggg?G``
 
 " Compile and run keymappings

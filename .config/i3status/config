@@ -33,7 +33,7 @@ cpu_usage {
 cpu_temperature 0 {
   format = " %degrees °C"
   max_threshold = 65
-  path = "/sys/devices/platform/coretemp.0/hwmon/hwmon4/temp1_input"
+  path = "~/.scripts/temp_input"
 }
 
 wireless _first_ {

@@ -13,9 +13,9 @@ exec --no-startup-id syncthing
 exec --no-startup-id xfsettingsd
 exec --no-startup-id unclutter --timeout 2 --ignore-scrolling
 exec --no-startup-id setxkbmap -layout "us,tr" -option grp:shift_caps_toggle
-#exec --no-startup-id xrandr --output HDMI-1 --primary --auto --output HDMI-2 --left-of HDMI-1 --auto
+exec --no-startup-id ~/.scripts/dual_monitor.sh
 exec --no-startup-id picom --no-use-damage
-exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
+#exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 
 # Use pactl to adjust volume in PulseAudio.
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -40,7 +40,7 @@ bindsym $mod+space exec "rofi -show drun -modi window,drun,run,find:~/.config/ro
 
 # misc controls
 bindsym XF86LaunchA exec "firefox --new-tab file:///tank/notebooks/_build/html/index.html"
-bindsym $mod+XF86LaunchA exec "$term -e vim /tank/notebooks/*-tasks.rst"
+bindsym $mod+XF86LaunchA exec "$term -e $editor /tank/notebooks/*-tasks.rst"
 bindsym XF86LaunchB exec $term -e htop
 bindsym $mod+XF86LaunchB exec $fm /tank/docs/
 

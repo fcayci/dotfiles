@@ -54,7 +54,8 @@ set nojoinspaces
 
 set list
 "set listchars=tab:» ,space:·
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+"set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
+set listchars=tab:▸\ ,extends:❯,precedes:❮
 set linebreak
 set showbreak=↪
 "set textwidth=80
@@ -81,15 +82,8 @@ augroup cline
     au WinEnter,InsertLeave * set cursorline
 augroup END
 
-" > Only show trailing when in normal mode {{{
-"
-augroup trailing
-    au!
-    au InsertEnter * :set listchars-=trail:·
-    au InsertLeave * :set listchars+=trail:·
-augroup END
-
-" }}}
+" Show trailing whitespace:
+au BufWinEnter * :set listchars+=trail:·
 
 " Clean trailing whitespace
 nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
@@ -181,8 +175,8 @@ nnoremap <c-l> <c-w>l
 " more convenient way of moving back and forth
 nnoremap H ^
 nnoremap L g_
-nnoremap J <c-f>
-nnoremap K <c-b>H
+nnoremap J <c-f>M
+nnoremap K <c-b>M
 
 map <tab> %
 
@@ -253,7 +247,6 @@ set foldtext=MyFoldText()
     au FileType asm setlocal noexpandtab shiftwidth=8 tabstop=8 softtabstop=8
     au FileType c setlocal foldmethod=marker foldmarker={,}
     au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
-    au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
 
 " }}}
 " > Python            {{{
@@ -275,6 +268,7 @@ augroup END
 augroup ft_rest
     au!
 
+    au BufRead *.rst setlocal fo+=aw
     au Filetype rst nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
@@ -298,11 +292,9 @@ augroup END
 augroup ft_mutt
     au!
 
+    au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
     au BufRead /tmp/mutt-* setlocal fo+=aw
-    au BufRead *.rst setlocal fo+=aw
-    au FileType vim setlocal foldmethod=marker
-    au FileType help setlocal textwidth=78
-    au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+    au BufRead /tmp/neomutt-* setlocal fo+=aw
 augroup END
 
 ""

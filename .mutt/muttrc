@@ -19,7 +19,7 @@ set write_inc        = 100
 set tilde
 set pipe_decode
 set delete_untag
-set delete           = ask-yes
+set delete           = yes
 set print            = ask-yes
 set nosig_dashes
 unset imap_check_subscribed
@@ -163,7 +163,7 @@ hdr_order From: Subject: To: CC: BCC: Reply-To: Date: User-Agent: X-Mailer:
 
 macro index,pager  a "<pipe-message>abook --add-email-quiet<return>" "Add this sender to Abook"
 
-macro index,pager  A "<save-message>=[Gmail]/All<enter><enter>" "Archive Message"
+macro index,pager  A "<save-message>=[Gmail]/Allenter>>" "Archive Message"
 macro index,pager  I "<save-message>=[Gmail]/Important<enter><enter>" "Mark Message as Important"
 macro index,pager  S "<save-message>=[Gmail]/Starred<enter><enter>" "Star Message"
 macro index,pager  ! "<save-message>=[Gmail]/Spam<enter><enter>" "Report spam"

@@ -85,17 +85,9 @@ augroup END
 " Show trailing whitespace:
 au BufWinEnter * :set listchars+=trail:·
 
-" Clean trailing whitespace
-nnoremap <leader>ww mz:%s/\s\+$//<cr>:let @/=''<cr>`z
-
-" > Clean trailing whitespace on save {{{
-
-" augroup cleantrailings
-"     autocmd!
-"     autocmd BufWritePre *.{py,vhd,sv,v,html,js,json,c,cpp,h,hpp,lua} let w:wv = winsaveview() | %s/\s\+$//e | call winrestview(w:wv)
-" augroup END
-
-" }}}
+" Clean trailing whitespace (all / only empty)
+nnoremap <leader>wa mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+nnoremap <leader>ww mz:%s/^\s\+$//<cr>:let @/=''<cr>`z
 
 " Make sure Vim returns to the same line when you reopen a file.
 augroup line_return
@@ -124,8 +116,10 @@ set nowb
 " }}}
 " > Tabs, space, wrap {{{
 
-" Automatically wrap left and right.
-" This allows to move the cursor to the previous/next line after reaching first/last character in the line using the arrow keys in normal-, insert- (<,>) and visual mode ([,]) or the h and l keys.
+" Automatically wrap left and right. This allows to move the cursor to the
+" previous/next line after reaching first/last character in the line using the
+" arrow keys in normal-, insert- (<,>) and visual mode ([,]) or the h and
+" l keys.
 set whichwrap+=<,>,h,l,[,]
 set wrap
 set formatoptions=qrn1j
@@ -243,10 +237,14 @@ set foldtext=MyFoldText()
 " }}}
 " FileTypes        {{{
 
-" > Common            {{{
-    au FileType asm setlocal noexpandtab shiftwidth=8 tabstop=8 softtabstop=8
+" > ASM               {{{
+
+    au FileType asm setlocal noexpandtab shiftwidth=4 tabstop=4 softtabstop=4
+
+" }}}
+" > C / C++           {{{
+
     au FileType c setlocal foldmethod=marker foldmarker={,}
-    au BufNewFile,BufRead *.m*down setlocal filetype=markdown foldlevel=1
 
 " }}}
 " > Python            {{{
@@ -256,23 +254,35 @@ augroup ft_python
 
     au FileType python setlocal foldmethod=indent foldnestmax=2 define=^\s*\\(def\\\\|class\\)
     au FileType man nnoremap <buffer> <cr> :q<cr>
-
     "au FileType python if exists("python_space_error_highlight") | unlet python_space_error_highlight | endif
-
     "au FileType python iabbrev <buffer> afo assert False, "Okay"
 augroup END
 
 " }}}
 " > ReStructuredText  {{{
 
-augroup ft_rest
+augroup ft_rst
     au!
 
-    au BufRead *.rst setlocal fo+=aw
+    au BufNewFile,BufRead *.rst setlocal filetype=rst fo+=aw
+    au Filetype rst nnoremap <buffer> <localleader>1 yyppVr=2kVr=3j:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>4 yypVr`:redraw<cr>
+
+    au FileType rst setl suffixesadd=.rst
+    au BufWritePost *.rst silent! execute "!make html >/dev/null 2>&1" | redraw!
+augroup END
+
+" }}}
+" > Markdown          {{{
+
+augroup ft_md
+    au!
+
+    au BufRead *.md setlocal fo+=aw
+    au BufNewFile,BufRead *.md setlocal filetype=markdown foldlevel=1
 augroup END
 
 " }}}
@@ -297,8 +307,18 @@ augroup ft_mutt
     au BufRead /tmp/neomutt-* setlocal fo+=aw
 augroup END
 
-""
 " }}}
+" > Tex               {{{
+
+augroup ft_tex
+    au!
+
+    au FileType tex setlocal foldmethod=marker foldmarker={{{,}}}
+    au BufRead *.tex setlocal fo+=aw
+augroup END
+
+" }}}
+
 " }}}
 " Custom Mappigns  {{{
 
@@ -369,8 +389,6 @@ au FileType html,xhtml map <F6> :!firefox %<cr>
 au FileType tex map <F6> :!texi2pdf -c %<cr>
 au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf&<cr>
 au FileType rst map <F6> :!make html &> /dev/null&<cr><cr>
-
-autocmd BufWritePost *.rst silent! execute "!make html >/dev/null 2>&1" | redraw!
 
 " }}}
 
@@ -512,58 +530,71 @@ function! s:show_documentation() " {{{
 endfunction " }}}
 
 " }}}
+" > preservim/nerdcommenter {{{
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Align line-wise comment delimiters flush left instead of following code
+" indentation
+let g:NERDDefaultAlign = 'left'
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not
+let g:NERDToggleCheckAllLines = 1
+
+" }}}
 
 " }}}
 " Zettelkasten     {{{
 
-" FIXME change this to rst
-" For inserting links for zettel
-" make_note_link: List -> Str
-" returned string: [Title](YYYYMMDDHH.rst)
-
-function! s:make_note_link(l) " {{{
-  " fzf#vim#complete returns a list with all info in index 0
-  let line = split(a:l[0], ':')
-  let ztk_id = l:line[0]
-  try
-    let ztk_title = substitute(l:line[2], '\#\+\s\+', '', 'g')
-  catch
-    let ztk_title = substitute(l:line[1], '\#\+\s\+', '', 'g')
-  endtry
-    let rstlink = "[" . ztk_title ."](". ztk_id .")"
-    return rstlink
-endfunction " }}}
-
-" mnemonic link zettel
-inoremap <expr> <c-l>z fzf#vim#complete({
-  \ 'source':  'rg --no-heading --smart-case  .',
-  \ 'reducer': function('<sid>make_note_link'),
-  \ 'options': '--multi --reverse --margin 15%,0',
-  \ 'up':    5})
-
 " Zettelkasten location
 let g:zettelkasten = "/tank/notebooks/"
 
-function! s:make_zettel_note(...) " {{{
+" mnemonic link zettel
+inoremap <expr> <c-l>z fzf#vim#complete({
+  \ 'source':  'rg --no-heading --smart-case --multiline --pcre2 "(?<====$\n)[\w \- .]+"',
+  \ 'reducer': function('<sid>zettel_note_link'),
+  \ 'options': '--multi --reverse --margin 15%,0',
+  \ 'up':    10})
+
+" Insert note line in rst format
+function! s:zettel_note_link(l) " {{{
+  " fzf#vim#complete returns a list with all info in index 0
+  let line = split(a:l[0], ':')
+  let ztk_id = substitute(l:line[0], '\.rst', '', '')
+  try
+    let ztk_title = l:line[2] " substitute(l:line[2], '=\+\_.\{-}=', '', 'g')
+  catch
+    let ztk_title = l:line[1] " substitute(l:line[1], '=\+\_.\{-}=', '', 'g')
+  endtry
+    let rstlink = ":doc:`" . ztk_title ." <". ztk_id .">`"
+    return rstlink
+endfunction " }}}
+
+" Create a new note
+function! s:zettel_new_note(...) " {{{
   " build the filename
   let l:sep = ''
   if len(a:000) > 0
     let l:sep = '-'
   endif
-  let l:fname = strftime("%Y%m%d%H%M") . l:sep . join(a:000, '-') . '.rst'
+  let l:zetname = strftime("%Y%m%d%H%M") . l:sep . join(a:000, '-') . '.rst'
 
   " edit the new file
-  execute "e " . g:zettelkasten . l:fname
-
-  setlocal fo+=aw
+  execute "e " . g:zettelkasten . l:zetname
 
   " enter the title and timestamp (using ultisnips) in the new file
   if len(a:000) > 0
-    exec "normal ggO.. \<c-r>=strftime('%Y-%m-%d %H:%M')\<cr> " . join(a:000) . "\<cr>\.. index::\<cr>\<cr>\<esc>40i=\<esc>o" . join(a:000) . "\<esc>G40i=\<esc>:\<esc>o\<cr>"
+    exec "normal ggO.. \<c-r>=strftime('%Y-%m-%d %H:%M')\<cr> " .
+        \ join(a:000) . "\<cr>\.. index::\<cr>\<esc>o" .
+        \ join(a:000) . "\<esc>guu~yyppVr=2kVr=3j\<cr>"
   else
     exec "normal ggO\<c-r>=strftime('%Y-%m-%d %H:%M')\<cr>\<cr>\<esc>G"
   endif
 endfunction " }}}
-command! -nargs=* Newnote call s:make_zettel_note(<f-args>)
+command! -nargs=* Note call s:zettel_new_note(<f-args>)
 
 " }}}

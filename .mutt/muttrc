@@ -176,6 +176,7 @@ bind index       <space>  noop
 bind index            gg  first-entry
 bind index             G  last-entry
 bind index          <F5>  imap-fetch-mail
+bind index             P  recall-message
 
 bind index,pager       s  flag-message
 bind index,pager       m  noop
@@ -192,6 +193,7 @@ bind pager             j  next-line
 bind pager             g  noop
 bind pager            gg  top
 bind pager             G  bottom
+
 
 bind editor        <Tab>  complete-query
 

@@ -127,7 +127,7 @@ color indicator white brightblack
 color status brightwhite black
 color status red white '(New|Del|Flag):[0-9]+'
 color tree white default
-color normal color241 color240
+color normal default default
 color markers green default
 color search white default
 color tilde brightmagenta default

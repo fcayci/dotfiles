@@ -172,6 +172,11 @@ nnoremap L g_
 nnoremap J <c-f>M
 nnoremap K <c-b>M
 
+vnoremap H ^
+vnoremap L g_
+vnoremap J <c-f>M
+vnoremap K <c-b>M
+
 map <tab> %
 
 " }}}
@@ -256,6 +261,8 @@ augroup ft_python
     au FileType man nnoremap <buffer> <cr> :q<cr>
     "au FileType python if exists("python_space_error_highlight") | unlet python_space_error_highlight | endif
     "au FileType python iabbrev <buffer> afo assert False, "Okay"
+    au FileType python map <F6> :!python %<cr>
+
 augroup END
 
 " }}}
@@ -273,6 +280,7 @@ augroup ft_rst
 
     au FileType rst setl suffixesadd=.rst
     au BufWritePost *.rst silent! execute "!make html >/dev/null 2>&1" | redraw!
+    au FileType rst map <F6> :!make html &> /dev/null&<cr><cr>
 augroup END
 
 " }}}
@@ -281,8 +289,15 @@ augroup END
 augroup ft_md
     au!
 
-    au BufRead *.md setlocal fo+=aw
-    au BufNewFile,BufRead *.md setlocal filetype=markdown foldlevel=1
+    au FileType markdown setlocal textwidth=80
+    au BufNewFile,BufRead *.md setlocal filetype=markdown fo+=aw
+    au Filetype markdown nnoremap <buffer> <localleader>1 yyppVr=2kVr=3j:redraw<cr>
+    au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
+    au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
+    au Filetype markdown nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
+    au Filetype markdown nnoremap <buffer> <localleader>4 yypVr`:redraw<cr>
+    au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf&<cr>
+
 augroup END
 
 " }}}
@@ -315,6 +330,7 @@ augroup ft_tex
 
     au FileType tex setlocal foldmethod=marker foldmarker={{{,}}}
     au BufRead *.tex setlocal fo+=aw
+    au FileType tex map <F6> :!lualatex %<cr>
 augroup END
 
 " }}}
@@ -384,11 +400,7 @@ map <F10> <ESC>ggg?G``
 "nnoremap <leader><cr> :silent !myctags >/dev/null 2>&1 &<cr>:redraw!<cr>
 " > FileType executions {{{
 
-au FileType python map <F6> :!python %<cr>
 au FileType html,xhtml map <F6> :!firefox %<cr>
-au FileType tex map <F6> :!texi2pdf -c %<cr>
-au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf&<cr>
-au FileType rst map <F6> :!make html &> /dev/null&<cr><cr>
 
 " }}}
 
@@ -545,6 +557,10 @@ let g:NERDCommentEmptyLines = 1
 " Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 
+nmap <leader>c<space> <plug>NERDCommenterComment
+xmap <leader>c<space> <plug>NERDCommenterComment
+nmap <leader>cc <plug>NERDCommenterToggle
+xmap <leader>cc <plug>NERDCommenterToggle
 " }}}
 
 " }}}

@@ -250,6 +250,7 @@ set foldtext=MyFoldText()
 " > C / C++           {{{
 
     au FileType c setlocal foldmethod=marker foldmarker={,}
+    au FileType cpp setlocal foldmethod=marker foldmarker={,}
 
 " }}}
 " > Python            {{{
@@ -273,7 +274,6 @@ augroup ft_rst
 
     au BufNewFile,BufRead *.rst setlocal filetype=rst fo+=aw
     au Filetype rst nnoremap <buffer> <localleader>1 yyppVr=2kVr=3j:redraw<cr>
-    au Filetype rst nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
     au Filetype rst nnoremap <buffer> <localleader>4 yypVr`:redraw<cr>
@@ -291,12 +291,15 @@ augroup ft_md
 
     au FileType markdown setlocal textwidth=80
     au BufNewFile,BufRead *.md setlocal filetype=markdown fo+=aw
-    au Filetype markdown nnoremap <buffer> <localleader>1 yyppVr=2kVr=3j:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>4 yypVr`:redraw<cr>
     au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf&<cr>
+
+    au FileType markdown setl suffixesadd=.md
+
+    let g:markdown_folding = 1
 
 augroup END
 
@@ -331,6 +334,15 @@ augroup ft_tex
     au FileType tex setlocal foldmethod=marker foldmarker={{{,}}}
     au BufRead *.tex setlocal fo+=aw
     au FileType tex map <F6> :!lualatex %<cr>
+augroup END
+
+" }}}
+" > Conf              {{{
+" Generic conf
+augroup ft_conf
+    au!
+
+    au FileType conf setlocal foldmethod=marker foldmarker={{{,}}}
 augroup END
 
 " }}}
@@ -565,29 +577,30 @@ xmap <leader>cc <plug>NERDCommenterToggle
 
 " }}}
 " Zettelkasten     {{{
+" Set up for Hugo Static Site generator
 
 " Zettelkasten location
 let g:zettelkasten = "/tank/notebooks/"
 
 " mnemonic link zettel
 inoremap <expr> <c-l>z fzf#vim#complete({
-  \ 'source':  'rg --no-heading --smart-case --multiline --pcre2 "(?<====$\n)[\w \- .]+"',
+  \ 'source':  'rg --no-heading --smart-case --multiline --pcre2 "^title+"',
   \ 'reducer': function('<sid>zettel_note_link'),
   \ 'options': '--multi --reverse --margin 15%,0',
   \ 'up':    10})
 
-" Insert note line in rst format
+" Insert note line in md format
 function! s:zettel_note_link(l) " {{{
   " fzf#vim#complete returns a list with all info in index 0
   let line = split(a:l[0], ':')
-  let ztk_id = substitute(l:line[0], '\.rst', '', '')
+  let ztk_id = substitute(l:line[0], '\.md', '', '')
   try
-    let ztk_title = l:line[2] " substitute(l:line[2], '=\+\_.\{-}=', '', 'g')
+    let ztk_title = substitute(l:line[2], '\v "|"', '', 'g')
   catch
-    let ztk_title = l:line[1] " substitute(l:line[1], '=\+\_.\{-}=', '', 'g')
+    let ztk_title = substitute(l:line[1], '\v "|"', '', 'g')
   endtry
-    let rstlink = ":doc:`" . ztk_title ." <". ztk_id .">`"
-    return rstlink
+    let mdlink = "[../". ztk_title ."](". ztk_id .")"
+    return mdlink
 endfunction " }}}
 
 " Create a new note
@@ -597,19 +610,18 @@ function! s:zettel_new_note(...) " {{{
   if len(a:000) > 0
     let l:sep = '-'
   endif
-  let l:zetname = strftime("%Y%m%d%H%M") . l:sep . join(a:000, '-') . '.rst'
+  let l:zetname = strftime("%Y%m%d%H%M") . l:sep . join(a:000, '-') . '.md'
+
+  " create file
+  execute "cd " . g:zettelkasten
+  execute "!hugo new " . l:zetname
 
   " edit the new file
-  execute "e " . g:zettelkasten . l:zetname
+  execute "e " . g:zettelkasten . "content/" . l:zetname
 
-  " enter the title and timestamp (using ultisnips) in the new file
-  if len(a:000) > 0
-    exec "normal ggO.. \<c-r>=strftime('%Y-%m-%d %H:%M')\<cr> " .
-        \ join(a:000) . "\<cr>\.. index::\<cr>\<esc>o" .
-        \ join(a:000) . "\<esc>guu~yyppVr=2kVr=3j\<cr>"
-  else
-    exec "normal ggO\<c-r>=strftime('%Y-%m-%d %H:%M')\<cr>\<cr>\<esc>G"
-  endif
+  " edit title and get ready to edit
+  exec "normal gg1j3wdw~G\<cr>\<cr>"
+
 endfunction " }}}
 command! -nargs=* Note call s:zettel_new_note(<f-args>)
 

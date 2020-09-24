@@ -408,6 +408,10 @@ nnoremap <F3> :TlistToggle<cr>
 set pastetoggle=<F8>
 map <F10> <ESC>ggg?G``
 
+" Copy pase with visual selection
+vnoremap <C-C> :w !xclip -i -sel c<CR><CR>
+vnoremap <C-V> :r !xclip -o -sel c<CR><CR>
+
 " Rebuild Ctags (mnemonic RC -> cr -> <cr>)
 "nnoremap <leader><cr> :silent !myctags >/dev/null 2>&1 &<cr>:redraw!<cr>
 " > FileType executions {{{

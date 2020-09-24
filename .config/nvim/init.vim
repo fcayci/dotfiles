@@ -603,7 +603,7 @@ function! s:zettel_note_link(l) " {{{
   catch
     let ztk_title = substitute(l:line[1], '\v "|"', '', 'g')
   endtry
-    let mdlink = "[../". ztk_title ."](". ztk_id .")"
+    let mdlink = "[". ztk_title ."](../". ztk_id .")"
     return mdlink
 endfunction " }}}
 

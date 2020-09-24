@@ -14,7 +14,7 @@ exec --no-startup-id syncthing
 exec --no-startup-id xfsettingsd
 exec --no-startup-id unclutter --timeout 2 --ignore-scrolling
 exec --no-startup-id setxkbmap -layout "us,tr" -option grp:shift_caps_toggle
-exec --no-startup-id ~/.scripts/dual_monitor.sh
+exec --no-startup-id ~/.local/bin/dual_monitor.sh
 exec --no-startup-id picom --no-use-damage
 #exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 

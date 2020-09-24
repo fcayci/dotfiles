@@ -33,7 +33,7 @@ cpu_usage {
 cpu_temperature 0 {
   format = " %degrees °C"
   max_threshold = 65
-  path = "~/.scripts/temp_input"
+  path = "~/.tempsensor"
 }
 
 wireless _first_ {

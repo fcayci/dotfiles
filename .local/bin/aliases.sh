@@ -8,6 +8,8 @@ alias cs='xclip -selection clipboard'
 alias vs='xclip -o -selection clipboard'
 alias encrypt='gpg --encrypt --sign --armor -r furkanca02@gmail.com'
 alias mutt='cd ~;mutt'
+alias diffy="kitty +kitten diff"
+alias gitdiff="git difftool --no-symlinks --dir-diff"
 
 note() {
   nvim "+Note $*"
@@ -18,17 +20,15 @@ alias todo='task'
 task() {
     if [[ $# -gt 1 ]] || ([[ $# -eq 1 ]] && [[ $1 != "list" ]])
     then
-        echo "* $*" >> /tank/notebooks/*-tasks.rst
+        echo "* $*" >> /tank/notebooks/content/tasks.md
         echo "'$*' added to agenda"
     elif [[ $# -eq 1 ]] && [[ $1 -eq "list" ]]
     then
-        echo "====="
         echo "Tasks"
-        echo "====="
-        cat /tank/notebooks/*-tasks.rst | grep -v "#"
+        cat /tank/notebooks/content/tasks.md | grep -v "#"
     else
         cd /tank/notebooks
-        vim *-tasks.rst
+        vim content/tasks.md
     fi
 }
 

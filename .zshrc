@@ -18,6 +18,6 @@ ZSH_THEME="intheloop"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-source ~/.scripts/aliases.sh
-source ~/.scripts/paths.sh
+source ~/.local/bin/aliases.sh
+source ~/.local/bin/misc.sh
 

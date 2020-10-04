@@ -17,7 +17,7 @@ set tags=./tags,tags;$HOME
 
 " }}}
 " Colorscheme      {{{
-
+"
 colorscheme nord
 
 " }}}
@@ -216,6 +216,7 @@ nnoremap zG 2zg
 " }}}
 " Folding          {{{
 
+set nofoldenable
 set foldlevelstart=0
 
 " Space to toggle folds.
@@ -249,8 +250,8 @@ set foldtext=MyFoldText()
 " }}}
 " > C / C++           {{{
 
-    au FileType c setlocal foldmethod=marker foldmarker={,}
-    au FileType cpp setlocal foldmethod=marker foldmarker={,}
+    au FileType c setlocal textwidth=80 foldmethod=marker foldmarker={,}
+    au FileType cpp setlocal textwidth=80 foldmethod=marker foldmarker={,}
 
 " }}}
 " > Python            {{{
@@ -258,7 +259,7 @@ set foldtext=MyFoldText()
 augroup ft_python
     au!
 
-    au FileType python setlocal foldmethod=indent foldnestmax=2 define=^\s*\\(def\\\\|class\\)
+    au FileType python setlocal textwidth=80 foldmethod=indent foldnestmax=2 define=^\s*\\(def\\\\|class\\)
     au FileType man nnoremap <buffer> <cr> :q<cr>
     "au FileType python if exists("python_space_error_highlight") | unlet python_space_error_highlight | endif
     "au FileType python iabbrev <buffer> afo assert False, "Okay"
@@ -289,8 +290,8 @@ augroup END
 augroup ft_md
     au!
 
-    au FileType markdown setlocal textwidth=80
-    au BufNewFile,BufRead *.md setlocal filetype=markdown fo+=aw
+    au FileType markdown setlocal textwidth=80 softtabstop=2 tabstop=2 shiftwidth=2
+    au BufNewFile,BufRead *.md setlocal filetype=markdown fo+=w
     au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
@@ -310,7 +311,7 @@ augroup ft_vim
     au!
 
     au FileType vim setlocal foldmethod=marker
-    au FileType help setlocal textwidth=78
+    au FileType help setlocal textwidth=80
     au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
 augroup END
 
@@ -321,8 +322,8 @@ augroup ft_mutt
     au!
 
     au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
-    au BufRead /tmp/mutt-* setlocal fo+=aw
-    au BufRead /tmp/neomutt-* setlocal fo+=aw
+    au FileType mail setlocal comments+=nb:> tw=72 fo+=aw nojs nosmartindent
+
 augroup END
 
 " }}}
@@ -332,7 +333,7 @@ augroup ft_tex
     au!
 
     au FileType tex setlocal foldmethod=marker foldmarker={{{,}}}
-    au BufRead *.tex setlocal fo+=aw
+    au BufRead *.tex setlocal fo+=w
     au FileType tex map <F6> :!lualatex %<cr>
 augroup END
 

@@ -1,36 +1,71 @@
-# muttrc - global configurations
+# vim: filetype=muttrc
 
 # General            {{{
 
-set mailcap_path     = ~/.mutt/mailcap
-set tmpdir           = /tmp
-set new_mail_command = "~/.mutt/scripts/new_mail.sh &"
-#set alias_file       = ~/.mutt/alias
-#set certificate_file = ~/.mutt/certificates
-set editor           = "vim +/^$ ++1 +:noh +star"
+# set editor to nvim
+set editor           = "nvim +/^$ ++1 +:noh +star"
+
+set my_name = "Furkan Cayci"
 
 # Make sure polls are not hogging mutt
+set imap_check_subscribed
 set mail_check       = 90
 set timeout          = 15
 set read_inc         = 100
 set write_inc        = 100
-set mbox_type        = Maildir
 
-set quit
-set delete
-set delete_untag
+set tmpdir = /tank/.mutt/tmp         # temp files
+#set mbox_type        = Maildir
+
+unset confirmappend      # don't ask, just do!
+set quit                 # don't ask, just do!
+set delete               # don't ask, just do!
+set delete_untag         # don't ask, just do!
 set print
 unset wait_key
-unset mark_old
-unset pipe_decode
-unset imap_check_subscribed
-set send_charset="utf-8:iso-8859-1"
-set rfc2047_parameters = yes
+unset mark_old           # read/new is good enough
+set beep_new             # bell on new mails
+set new_mail_command = "notify-send -a mutt -i /usr/share/doc/neomutt/logo/neomutt.svg '%n new mail'"
+
+set pipe_decode          # strip headers and eval mimes when piping
+set thorough_search      # strip headers and eval mimes before searching
+
+set send_charset = "utf-8:iso-8859-1:iso-8859-2"
+set charset = "utf-8"
+#set rfc2047_parameters = yes
+
+set narrow_tree          # deeper threads
+set strict_threads       # don't sort by name, sort by in reply to
 
 # }}}
-# Index View Options {{{
+# Compose Options    {{{
 
-set date_format      = "%m/%d %H:%M"
+set hostname = jazz
+set envelope_from
+set edit_headers                     # show headers when writing mail
+set askcc                            # ask for CC:
+set fcc_attach                       # save attachments with the body
+set forward_format = "Fwd: %s"       # forward format
+set forward_decode                   # decode when forwarding
+set attribution = "On %d, %n wrote:" # quoting format
+set fast_reply                       # dont ask questions when replying
+set reply_to                         # reply to Reply to: field
+set reverse_name                     # reply as whomever it was to
+set reply_regexp = "^((re|ynt)(\[[0-9]+\])*:[ \t]*)*"
+set include                          # include message in replies
+set forward_quote                    # include message in forwards
+set text_flowed                      # no hard breaks
+unset sig_dashes                     # no dashes before sig
+unset mime_forward                   # forward attachments as part of body
+unset help                           # No help bar at the top of index
+set status_on_top                    # Status bar on top of index
+set compose_format = "Compose from %h [Mail size: %l Attachments: %a]%>─"
+set pager_format = "[%-20.20n] %s %* [%P]"
+
+# }}}
+# Index              {{{
+
+set date_format      = "%d %b %H:%M"
 set index_format     = "[%Z] %D %-20.20F ⌜%s⌟"
 set sort             = threads
 set sort_aux         = reverse-last-date-received
@@ -40,15 +75,13 @@ set uncollapse_jump
 # Status Bar         {{{
 
 set status_chars     = " *%A"
-set status_format = "───[ Folder: %f ]───[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]───%>─%?p?( %p postponed )?───"
+set status_format = "[%D (%m)] %?n?─ [New:%n] ?%?t?─ [Tag:%t] ?%?F?─ [Flag:%F] ?─%>─%?d? [Del:%d] ?──"
 
 # }}}
 # Sidebar            {{{
 
-set sidebar_visible  = yes
-set sidebar_width    = 24
-#set sidebar_divider_char = '|'
-set sidebar_format   = "%D%?F? [%F]?%* %?N?%N/?%S "
+set sidebar_width    = 15
+set sidebar_format   = "%D"
 
 # }}}
 # Pager              {{{
@@ -56,30 +89,17 @@ set sidebar_format   = "%D%?F? [%F]?%* %?N?%N/?%S "
 set pager_index_lines = 10
 set pager_context     = 3
 set pager_stop
-set nosmart_wrap
+unset smart_wrap
+unset markers
 set menu_scroll
 set tilde
-unset markers
+
+set mailcap_path = ~/.mutt/mailcap
+set header_cache = "/tank/.mutt/cache"
+set message_cachedir = "/tank/.mutt/cache"
+
 #alternative_order multipart/related text/enriched text/plain text/html
 alternative_order text/plain text/enriched text/html
-
-# }}}
-# Compose Options    {{{
-
-set hostname           = jazz
-set edit_headers
-set forward_format     = "Fwd: %s"
-set attribution        = "On %d, %n wrote:"
-unset mime_forward
-set reply_to
-set fast_reply
-set askcc
-set fcc_attach
-set reverse_name
-set include
-set reply_regexp = "^((re|ynt)(\[[0-9]+\])*:[ \t]*)*"
-set text_flowed
-unset sig_dashes
 
 # }}}
 # Phonebook          {{{
@@ -87,124 +107,21 @@ unset sig_dashes
 set query_command  = "abook --mutt-query '%s'"
 
 # }}}
-# Autoviews          {{{
+# Views              {{{
 
-auto_view application/zip
-auto_view application/x-gzip
-auto_view application/x-gunzip
-auto_view application/pgp-signature
-auto_view application/pgp
 auto_view application/octet-stream
-auto_view application/x-zip-compressed
-auto_view application/x-arj-compressed
-auto_view application/x-tar-gz
-auto_view application/ms-tnef
-auto_view application/x-perl
-auto_view application/x-sh
-auto_view application/x-tcl
-auto_view application/x-delphi-source
-auto_view application/emacs-lisp
-auto_view application/msword
-auto_view text/x-patch
 auto_view text/html
-auto_view text/x-vcard
-auto_view text/x-script.elisp
-auto_view text/x-lisp
-auto_view text/x-diff
-auto_view image/tiff
 
 # }}}
-# Colors             {{{
+# Keybindings        {{{
 
-color hdrdefault blue default
-color quoted blue default
-color signature blue default
-color attachment green default
-color prompt brightblue default
-color message brightgreen default
-color error red default
-color indicator white brightblack
-color status brightwhite black
-color status red white '(New|Del|Flag):[0-9]+'
-color tree white default
-color normal default default
-color markers green default
-color search white default
-color tilde brightmagenta default
-color index bold blue default ~F
-color index bold blue default "~N|~O"
-color index bold red default "~D"
-color index_date none white default
-color sidebar_highlight white black
-color sidebar_indicator bold blue black
-color sidebar_divider black default
-
-# }}}
-# Headers            {{{
-
-# Ignore all headers
-ignore *
-
-# Then un-ignore the ones I want to see
-unignore From:
-unignore To:
-#unignore Reply-To:
-#unignore Mail-Followup-To:
-unignore Subject:
-unignore Date:
-#unignore Organization:
-#unignore Newsgroups:
-unignore CC:
-unignore BCC:
-#unignore Message-ID:
-#unignore X-Mailer:
-#unignore User-Agent:
-#unignore X-Junked-Because:
-#unignore X-SpamProbe:
-#unignore X-Virus-hagbard:
-
-# Now order the visable header lines
-unhdr_order *
-hdr_order Date: From: To: CC: BCC: Subject:
-
-# }}}
-# Macros             {{{
-
-# Better copy / move dialogs
-macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
-macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
-
-# Ctrl-R to mark all as read
-macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
-
-macro index,pager      a "<pipe-message>abook --add-email-quiet<return>" "Add this sender to Abook"
-macro index,pager      A "<save-message>=[Gmail]/All <enter><enter>" "Archive Message"
-macro index,pager      F "<save-message>=[Gmail]/Starred<enter><enter>" "Star Message"
-macro index,pager      ! "<save-message>=[Gmail]/Spam<enter><enter>" "Report spam"
-macro index,pager      S "| ~/.scripts/save_mail.sh /tank/.mail/saved/<enter>"
- macro attach 'V' "<pipe-entry>iconv -c --to-code=UTF8 > ~/.cache/mutt/mail.html<enter><shell-escape>firefox ~/.cache/mutt/mail.html<enter>"
-macro index,pager          <F4> "<pipe-message> ripmime -i - -d /tank/.mail/saved/" "Save all non-text attachments using ripmime"
-macro pager          \cu "<pipe-message> urlscan<Enter>" "call urlscan to extract URLs out of a message"
-
-bind index             g  noop
 bind index       <space>  noop
+
 bind index       <space>  collapse-thread
 bind index         <tab>  sync-mailbox
+bind index             g  noop
 bind index            gg  first-entry
 bind index             G  last-entry
-bind index          <F5>  imap-fetch-mail
-bind compose           p  postpone-message
-bind index             P  recall-message
-
-bind index,pager       s  flag-message
-bind index,pager       m  mail
-bind index,pager       @  compose-to-sender
-bind index,pager    <F2>  sidebar-toggle-visible
-bind index,pager  <down>  sidebar-next
-bind index,pager    <up>  sidebar-prev
-bind index,pager <right>  sidebar-open
-bind index,pager  <left>  noop
-bind index,pager       R  group-reply
 
 bind pager       <space>  noop
 bind pager             k  previous-line
@@ -213,13 +130,60 @@ bind pager             g  noop
 bind pager            gg  top
 bind pager             G  bottom
 
-bind editor        <Tab>  complete-query
+bind index,pager       x  next-unread
+bind index,pager       s  flag-message
+bind index,pager       @  compose-to-sender
+bind index,pager    <F2>  sidebar-toggle-visible
+bind index,pager  <down>  sidebar-next
+bind index,pager    <up>  sidebar-prev
+bind index,pager <right>  sidebar-open
+bind index,pager  <left>  noop
+
+# Email completion bindings
+bind editor <Tab> complete-query
+bind editor ^T complete
 
 bind attach     <return>  view-mailcap
-# }}}
-# Includes           {{{
 
-source /usr/share/doc/neomutt/samples/gpg.rc
+bind compose           p  postpone-message
+
+# }}}
+# Macros             {{{
+
+macro index,pager A \
+    "<pipe-message>abook --add-email-quiet<return>" \
+    "add the sender email address to abook"
+
+# if pipe-decode is unset
+# macro index,pager A \
+#     "<enter-command>set my_pipe_decode=\$pipe_decode pipe_decode<return> \
+#     <pipe-message>abook --add-email-quiet<return> \
+#     <enter-command>set pipe_decode=\$my_pipe_decode; unset my_pipe_decode<return>" \
+#     "add the sender address to abook"
+
+# Better copy / move dialogs
+macro index C "<copy-message>?<toggle-mailboxes>" \
+    "copy a message to a mailbox"
+
+macro index M "<save-message>?<toggle-mailboxes>" \
+    "move a message to a mailbox"
+
+macro index,pager S \
+    "| ~/.local/bin/save_mail.sh /tank/.mail/saved/<enter>"
+
+macro index,pager <F4> \
+    "<pipe-message> ripmime -i - -d /tank/.mail/saved/" \
+    "save all non-text attachments using ripmime"
+
+macro pager \cu \
+    "<pipe-message> urlscan<Enter>" \
+    "call urlscan to extract URLs out of a message"
+
+# macro attach V \
+#     "<pipe-entry>iconv -c --to-code=UTF8 > ~/.cache/mutt/mail.html<enter> \
+#     <shell-escape>firefox ~/.cache/mutt/mail.html<enter>"
+
+# }}}
+
+source ~/.mutt/colors/nord.muttrc
 source ~/.mutt/accounts/gmail
-
-# }}}

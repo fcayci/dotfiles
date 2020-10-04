@@ -1,0 +1,37 @@
+########################################################################
+# vim: filetype=muttrc
+
+color error       default red
+color attachment  yellow  default
+color search      green   default
+color signature   blue    default
+color hdrdefault  blue    default
+color quoted      blue    default
+color prompt      blue    default
+color message     green   default
+color indicator   white   brightblack
+color tree        white   default
+color normal      default default
+color markers     green   default
+color index_date  white   default
+color tilde       brightmagenta default
+
+color sidebar_highlight white black
+color sidebar_indicator bold  blue    black
+color sidebar_divider   black default
+
+color index  red      default ~D    # deleted messages
+color index  green    default ~F    # flagged messages
+color index  yellow   default ~T    # tagged messages
+color index  blue     default ~N|~O # new messages
+color index  cyan     default ~v    # messages part of a collapsed thread
+
+color status brightwhite default
+color status black   yellow  '(New):[0-9]+'
+color status green   default '(Flag):[0-9]+'
+color status default red     '(Del):[0-9]+'
+color status yellow  default '(Tag):[0-9]+'
+
+color body yellow default [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+ # email
+color body yellow default (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+ # URLs
+

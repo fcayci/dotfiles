@@ -22,6 +22,7 @@ set quit                 # don't ask, just do!
 set delete               # don't ask, just do!
 set delete_untag         # don't ask, just do!
 set print
+set noresolve            # don't go to the next line
 unset wait_key
 unset mark_old           # read/new is good enough
 set beep_new             # bell on new mails
@@ -36,6 +37,7 @@ set charset = "utf-8"
 
 set narrow_tree          # deeper threads
 set strict_threads       # don't sort by name, sort by in reply to
+set sleep_time = 0       # be fast
 
 # }}}
 # Compose Options    {{{
@@ -75,7 +77,7 @@ set uncollapse_jump
 # Status Bar         {{{
 
 set status_chars     = " *%A"
-set status_format = "[%D (%m)] %?n?─ [New:%n] ?%?t?─ [Tag:%t] ?%?F?─ [Flag:%F] ?─%>─%?d? [Del:%d] ?──"
+set status_format = "[%D (%m)] %?n?─ [New:%n] ?%?d?─ [Del:%d] ?%?F?─ [Flag:%F] ?─%>─%?t? [Tag:%t] ?──"
 
 # }}}
 # Sidebar            {{{
@@ -98,8 +100,11 @@ set mailcap_path = ~/.mutt/mailcap
 set header_cache = "/tank/.mutt/cache"
 set message_cachedir = "/tank/.mutt/cache"
 
+bind attach     <return>  view-mailcap
 #alternative_order multipart/related text/enriched text/plain text/html
 alternative_order text/plain text/enriched text/html
+unauto_view *
+auto_view text/html
 
 # }}}
 # Phonebook          {{{
@@ -143,8 +148,6 @@ bind index,pager  <left>  noop
 bind editor <Tab> complete-query
 bind editor ^T complete
 
-bind attach     <return>  view-mailcap
-
 bind compose           p  postpone-message
 
 # }}}
@@ -178,10 +181,6 @@ macro index,pager <F4> \
 macro pager \cu \
     "<pipe-message> urlscan<Enter>" \
     "call urlscan to extract URLs out of a message"
-
-# macro attach V \
-#     "<pipe-entry>iconv -c --to-code=UTF8 > ~/.cache/mutt/mail.html<enter> \
-#     <shell-escape>firefox ~/.cache/mutt/mail.html<enter>"
 
 # }}}
 

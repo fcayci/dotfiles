@@ -10,5 +10,6 @@
     "editor.renderWhitespace": "all",
     "editor.autoIndent": "keep",
     "editor.insertSpaces": false,
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",
+    "workbench.colorTheme": "Nord"
 }

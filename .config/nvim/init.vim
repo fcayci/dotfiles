@@ -296,11 +296,11 @@ augroup ft_md
     au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
     au Filetype markdown nnoremap <buffer> <localleader>4 yypVr`:redraw<cr>
-    au FileType markdown map <F6> :!pandoc % --pdf-engine=pdflatex -o /tmp/%.pdf && xdg-open /tmp/%.pdf&<cr>
-
     au FileType markdown setl suffixesadd=.md
 
     let g:markdown_folding = 1
+    " Replace the lastmod date on markdow notes
+    au BufWritePost *.md execute ":silent! 1," . 20 . "g/^lastmod:/s/20.*/" .strftime("%Y-%m-%d") | execute "''"
 
 augroup END
 

@@ -143,6 +143,7 @@ bind index,pager  <down>  sidebar-next
 bind index,pager    <up>  sidebar-prev
 bind index,pager <right>  sidebar-open
 bind index,pager  <left>  noop
+bind index,pager       R  group-reply
 
 # Email completion bindings
 bind editor <Tab> complete-query

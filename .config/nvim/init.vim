@@ -250,8 +250,8 @@ set foldtext=MyFoldText()
 " }}}
 " > C / C++           {{{
 
-    au FileType c setlocal textwidth=80 foldmethod=marker foldmarker={,}
-    au FileType cpp setlocal textwidth=80 foldmethod=marker foldmarker={,}
+    au FileType c,cpp setlocal textwidth=80 foldmethod=marker foldnestmax=1 foldmarker={,}
+    au FileType c,cpp map <F6> :!make<cr>
 
 " }}}
 " > Python            {{{
@@ -402,11 +402,7 @@ vnoremap <S-Tab> <gv
 vnoremap > >gv
 vnoremap < <gv
 
-" i use o esc a lot. move it to enter in normal mode
-nnoremap <cr> o<esc>
-
-nnoremap <F3> :TlistToggle<cr>
-set pastetoggle=<F8>
+nnoremap <leader>t :TlistToggle<cr>
 map <F10> <ESC>ggg?G``
 
 " Copy pase with visual selection
@@ -417,7 +413,7 @@ vnoremap <C-V> :r !xclip -o -sel c<CR><CR>
 "nnoremap <leader><cr> :silent !myctags >/dev/null 2>&1 &<cr>:redraw!<cr>
 " > FileType executions {{{
 
-au FileType html,xhtml map <F6> :!firefox %<cr>
+au FileType html,xhtml map <F6> :!qutebrowser %<cr>
 
 " }}}
 
@@ -558,26 +554,6 @@ function! s:show_documentation() " {{{
   endif
 endfunction " }}}
 
-" }}}
-" > preservim/nerdcommenter {{{
-
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-
-" Align line-wise comment delimiters flush left instead of following code
-" indentation
-let g:NERDDefaultAlign = 'left'
-
-" Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDCommentEmptyLines = 1
-
-" Enable NERDCommenterToggle to check all selected lines is commented or not
-let g:NERDToggleCheckAllLines = 1
-
-nmap <leader>c<space> <plug>NERDCommenterComment
-xmap <leader>c<space> <plug>NERDCommenterComment
-nmap <leader>cc <plug>NERDCommenterToggle
-xmap <leader>cc <plug>NERDCommenterToggle
 " }}}
 
 " }}}

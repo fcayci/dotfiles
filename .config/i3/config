@@ -2,6 +2,7 @@ set $mod Mod4
 set $term kitty
 set $editor nvim
 set $fm pcmanfm
+set $browser qutebrowser
 
 font pango:Source Code Pro-10 8
 
@@ -40,8 +41,9 @@ bindsym $mod+t exec $fm
 bindsym $mod+space exec "rofi -show drun -modi window,drun,run,find:~/.config/rofi/finder.sh"
 
 # misc controls
-bindsym XF86LaunchA exec "firefox --new-tab file:///tank/notebooks/_build/html/202006072043-tasks.html"
-bindsym $mod+XF86LaunchA exec "$term -e $editor /tank/notebooks/*-tasks.rst"
+bindsym XF86LaunchA exec $browser localhost:1313/tasks
+bindsym $mod+XF86LaunchA exec "$term -e $editor /tank/notebooks/content/tasks.md"
+
 bindsym XF86LaunchB exec $term -e htop
 bindsym $mod+XF86LaunchB exec $fm /tank/docs/
 

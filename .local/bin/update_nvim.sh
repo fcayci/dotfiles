@@ -40,13 +40,14 @@ else
   git clone https://github.com/preservim/nerdtree.git
 fi
 
-echo "## Setting up nerdcommenter..."
-if [ -d "nerdcommenter" ]; then
-  cd nerdcommenter
+echo "## Setting up vim-commentary..."
+if [ -d "vim-commentary" ]; then
+  cd vim-commentary
   git pull origin master
   cd ..
 else
-  git clone https://github.com/preservim/nerdcommenter
+  git clone https://github.com/tpope/vim-commentary
+  vim -u NONE -c "helptags commentary/doc" -c q
 fi
 
 echo "## Setting up taglist..."
@@ -68,6 +69,25 @@ else
   cd coc.nvim
   git checkout origin/release
   cd ..
+fi
+
+echo "## Setting up vim-surround..."
+if [ -d "vim-surround" ]; then
+  cd vim-surround
+  git pull origin master
+  cd ..
+else
+  git clone https://github.com/tpope/vim-surround.git
+  vim -u NONE -c "helptags surround/doc" -c q
+fi
+
+echo "## Setting up vim-system-copy..."
+if [ -d "vim-system-copy" ]; then
+  cd vim-system-copy
+  git pull origin master
+  cd ..
+else
+  git clone https://github.com/christoomey/vim-system-copy.git
 fi
 
 echo "## Installing required packages..."

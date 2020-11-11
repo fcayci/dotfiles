@@ -1,6 +1,6 @@
 # newsboat config
 
-browser  firefox
+browser  qutebrowser
 
 datetime-format "%m/%d"
 article-sort-order date-asc

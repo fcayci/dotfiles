@@ -354,6 +354,9 @@ augroup END
 " disable u in visual mode
 vnoremap u <nop>
 
+" i use o esc a lot. move it to enter in normal mode
+nnoremap <cr> o<esc>
+
 " overload save
 nnoremap S :w<cr>
 

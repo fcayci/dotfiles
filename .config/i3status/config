@@ -12,10 +12,10 @@ order += "cpu_usage"
 #order += "disk /tank"
 order += "memory"
 order += "load"
-order += "tztime local"
 order += "wireless _first_"
 order += "ethernet _first_"
 order += "volume master"
+order += "tztime local"
 
 volume master {
   format = " %volume"

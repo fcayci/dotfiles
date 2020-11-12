@@ -45,6 +45,10 @@ config.bind(',m', 'spawn mpv --force-window=immediate {url}')
 config.bind(',f', 'spawn firefox {url}')
 config.bind(',t', 'spawn --userscript tureng')
 
+config.bind(',m', 'spawn ~/.local/bin/umpv {url}')
+config.bind(',M', 'hint links spawn ~/.local/bin/umpv {hint-url}')
+config.bind(';M', 'hint --rapid links spawn ~/.local/bin/umpv {hint-url}')
+
 # Aliases for commands. The keys of the given dictionary are the
 # aliases, while the values are the commands they map to.
 c.aliases = {

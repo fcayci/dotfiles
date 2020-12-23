@@ -302,6 +302,7 @@ augroup ft_md
     " Replace the lastmod date on markdow notes
     au BufWritePost *.md execute ":silent! 1," . 20 . "g/^lastmod:/s/20.*/" .strftime("%Y-%m-%d") | execute "''"
 
+    au FileType markdown map <F6> :silent !qutebrowser http://localhost:1313/%:r<cr>
 augroup END
 
 " }}}

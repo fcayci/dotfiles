@@ -20,14 +20,14 @@ alias todo='task'
 task() {
     if [[ $# -gt 1 ]] || ([[ $# -eq 1 ]] && [[ $1 != "list" ]])
     then
-        echo "* $*" >> /tank/notebooks/content/tasks.md
+        echo "* $*" >> ~/notebooks/content/tasks.md
         echo "'$*' added to agenda"
     elif [[ $# -eq 1 ]] && [[ $1 -eq "list" ]]
     then
         echo "Tasks"
-        cat /tank/notebooks/content/tasks.md | grep -v "#"
+        cat ~/notebooks/content/tasks.md | grep -v "#"
     else
-        cd /tank/notebooks
+        cd ~/notebooks
         vim content/tasks.md
     fi
 }

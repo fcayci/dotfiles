@@ -33,10 +33,10 @@ config.bind("<ctrl+tab>", "tab-next")
 config.bind("<ctrl+shift+tab>", "tab-prev")
 
 # Bindings for normal mode
-config.bind(',m', 'spawn mpv --force-window=immediate {url}')
 config.bind(',f', 'spawn firefox {url}')
 config.bind(',t', 'spawn --userscript tureng')
 
+#config.bind(',m', 'spawn mpv --force-window=immediate {url}')
 config.bind(',m', 'spawn ~/.local/bin/umpv {url}')
 config.bind(',M', 'hint links spawn ~/.local/bin/umpv {hint-url}')
 config.bind(';M', 'hint --rapid links spawn ~/.local/bin/umpv {hint-url}')
@@ -49,6 +49,7 @@ c.aliases = {
     "mpv": "spawn -d mpv --force-window=immediate {url}",
     "nicehash": "spawn --userscript nicehash",
     "pass": "spawn -d pass -c",
+    "zotero": "jseval --quiet var d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);",
 }
 
 # Background color of unselected tabs.

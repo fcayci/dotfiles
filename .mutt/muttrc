@@ -33,7 +33,7 @@ set thorough_search      # strip headers and eval mimes before searching
 
 set send_charset = "utf-8:iso-8859-1:iso-8859-2"
 set charset = "utf-8"
-#set rfc2047_parameters = yes
+set rfc2047_parameters = yes
 
 set narrow_tree          # deeper threads
 set strict_threads       # don't sort by name, sort by in reply to
@@ -173,10 +173,10 @@ macro index M "<save-message>?<toggle-mailboxes>" \
     "move a message to a mailbox"
 
 macro index,pager S \
-    "| ~/.local/bin/save_mail.sh /tank/.mail/saved/<enter>"
+    "| ~/.local/bin/save_mail.sh ~/.mail/saved/<enter>"
 
 macro index,pager <F4> \
-    "<pipe-message> ripmime -i - -d /tank/.mail/saved/" \
+    "<pipe-message> ripmime -i - -d ~/.mail/saved/" \
     "save all non-text attachments using ripmime"
 
 macro pager \cu \

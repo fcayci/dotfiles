@@ -33,5 +33,3 @@ export EDITOR=nvim
 export ARCHFLAGS="-arch x86_64"
 
 export PATH="$HOME/.local/bin:$PATH"
-
-export PYTHONPATH=$PYTHONPATH:/usr/lib/python3.8:/usr/lib/python3.8/lib-dynload:/usr/lib/python3.8/site-packages

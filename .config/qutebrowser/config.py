@@ -49,8 +49,12 @@ c.aliases = {
     "mpv": "spawn -d mpv --force-window=immediate {url}",
     "nicehash": "spawn --userscript nicehash",
     "pass": "spawn -d pass -c",
-    "zotero": "jseval --quiet var d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0);",
+    "zoteroweb": "jseval --url --quiet javascript:var d=document,s=d.createElement('script');s.src='https://www.zotero.org/bookmarklet/loader.js';(d.body?d.body:d.documentElement).appendChild(s);void(0)",
+    "zot": "spawn --userscript zotero",
+    "Zot": "hint links userscript zotero"
 }
+
+
 
 # Background color of unselected tabs.
 c.colors.tabs.even.bg = "silver"

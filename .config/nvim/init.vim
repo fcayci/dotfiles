@@ -430,6 +430,16 @@ au FileType html,xhtml map <F6> :!qutebrowser %<cr>
 map ; :Files<cr>
 map gb :Buffers<cr>
 
+nnoremap <leader>f :Rg<cr>
+
+" Rg current word
+nnoremap <silent> <Leader>rg :Rg <C-R><C-W><CR>
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+  \fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+
 " }}}
 " > preservim/nerdtree      {{{
 
@@ -565,7 +575,7 @@ endfunction " }}}
 " Set up for Hugo Static Site generator
 
 " Zettelkasten location
-let g:zettelkasten = "/tank/notebooks/"
+let g:zettelkasten = "~/notebooks/"
 
 " mnemonic link zettel
 inoremap <expr> <c-l>z fzf#vim#complete({

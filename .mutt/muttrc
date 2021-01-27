@@ -166,21 +166,21 @@ macro index,pager A \
 #     "add the sender address to abook"
 
 # Better copy / move dialogs
-macro index C "<copy-message>?<toggle-mailboxes>" \
+macro index,pager C "<copy-message>?<toggle-mailboxes>" \
     "copy a message to a mailbox"
 
-macro index M "<save-message>?<toggle-mailboxes>" \
+macro index,pager M "<save-message>?<toggle-mailboxes>" \
     "move a message to a mailbox"
 
 macro index,pager S \
-    "| ~/.local/bin/save_mail.sh ~/.mail/saved/<enter>"
+    "| ~/.local/bin/save_mail.sh ~/hacks/mail/<enter>"
 
 macro index,pager <F4> \
-    "<pipe-message> ripmime -i - -d ~/.mail/saved/" \
+    "<pipe-message> ripmime -i - -d ~/hacks/mail/" \
     "save all non-text attachments using ripmime"
 
 macro pager \cu \
-    "<pipe-message> urlscan<Enter>" \
+    "<pipe-message> urlview<Enter>" \
     "call urlscan to extract URLs out of a message"
 
 # }}}

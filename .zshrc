@@ -40,7 +40,7 @@ alias config='$(which git) --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 bindkey -v
 
 # add local bin directory
-[ -d "$HOME/.local/bin" ] && path+=('$HOME/.local/bin')
+[ -d "$HOME/.local/bin" ] && path+=$HOME/.local/bin
 
 export PATH
 

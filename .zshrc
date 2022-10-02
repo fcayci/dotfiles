@@ -33,6 +33,9 @@ alias config='$(which git) --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 [ -d "/opt/homebrew/bin" ] && path+=('/opt/homebrew/bin')
 #[ -d "/opt/homebrew/bin" ] && path=('/opt/homebrew/bin' $path)
 
+# use homebrew ctags
+[ -x "`brew --prefix`/bin/ctags" ] && alias ctags="`brew --prefix`/bin/ctags"
+
 # setup fzf
 if [ -f ~/.fzf.zsh ]; then
   source ~/.fzf.zsh

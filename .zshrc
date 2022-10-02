@@ -1,6 +1,6 @@
-export ZSH="/home/fcayci/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
-ZSH_THEME="intheloop"
+ZSH_THEME="robbyrussell"
 
 # CASE_SENSITIVE="true"
 # HYPHEN_INSENSITIVE="true"
@@ -18,6 +18,29 @@ ZSH_THEME="intheloop"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-source ~/.local/bin/aliases.sh
-source ~/.local/bin/misc.sh
+
+export EDITOR='vim'
+export LANG=en_US.UTF-8
+#export ARCHFLAGS="-arch x86_64"
+
+# make neovim default
+[ -f /opt/homebrew/bin/nvim ] && export EDITOR='nvim' && alias vim=nvim
+
+# dotfiles git support
+alias config='$(which git) --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
+
+# add homebrew
+[ -d "/opt/homebrew/bin" ] && path+=('/opt/homebrew/bin')
+#[ -d "/opt/homebrew/bin" ] && path=('/opt/homebrew/bin' $path)
+
+# give default fzf command
+[ -x "$(which fzf)" ] && [ -x "$(which ag)" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+
+# Vi mode
+bindkey -v
+
+# add local bin directory
+[ -d "$HOME/.local/bin" ] && path+=('$HOME/.local/bin')
+
+export PATH
 

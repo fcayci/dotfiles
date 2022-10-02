@@ -3,10 +3,11 @@
 
 " Essentials       {{{
 
+set nocompatible
+
 filetype on
 filetype plugin on
 filetype indent on
-set nocompatible
 
 " Leader
 let mapleader = ","
@@ -17,49 +18,61 @@ set tags=./tags,tags;$HOME
 
 " }}}
 " Colorscheme      {{{
-"
-colorscheme nord
+
+syntax enable
+colorscheme onehalfdark
 
 " }}}
 " Basic Options    {{{
 
 " > General           {{{
+
 set encoding=utf-8
 set fileencoding=utf-8
-set fileencodings="utf-8,iso-8859-8"
 
-set ffs=unix,dos,mac
-
-set autochdir
-set autoindent
-"set showcmd
-set modelines=0
-set hidden
+" no bells
 set novisualbell
 set noerrorbells
-set ttyfast
+set t_vb=
+
+set modelines=0
+set hidden
 set laststatus=2
 set history=1000
-set undofile
 set undoreload=10000
 set lazyredraw
+set ttyfast
 set matchtime=3
 set splitbelow splitright
 set shiftround
 set title
 set colorcolumn=+1
-set t_vb=
 set backspace=indent,eol,start
 set nojoinspaces
 
+set autochdir
+set autoindent
+
+" show whitespaces
 set list
+
 "set listchars=tab:» ,space:·
 "set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮
 set listchars=tab:▸\ ,extends:❯,precedes:❮
+
+" show trailing whitespace:
+au BufWinEnter * :set listchars+=trail:·
+
+" clean trailing whitespace (all / only empty)
+nnoremap <leader>wa mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+nnoremap <leader>ww mz:%s/^\s\+$//<cr>:let @/=''<cr>`z
+
 set linebreak
 set showbreak=↪
-"set textwidth=80
+
 set synmaxcol=800 " Dont highlight longer than 800 chars
+
+set textwidth=80
 
 set magic
 set mat=2
@@ -68,28 +81,21 @@ set ruler
 set number
 set relativenumber
 
-" Better Completion
+" better Completion
 set complete=.,w,b,u,t
 set completeopt=longest,menuone,preview
 
-" Resize splits when the window is resized
+" resize splits when the window is resized
 au VimResized * :wincmd =
 
-" Only show cursorline in the current window and in normal mode.
+" only show cursorline in the current window and in normal mode.
 augroup cline
     au!
     au WinLeave,InsertEnter * set nocursorline
     au WinEnter,InsertLeave * set cursorline
 augroup END
 
-" Show trailing whitespace:
-au BufWinEnter * :set listchars+=trail:·
-
-" Clean trailing whitespace (all / only empty)
-nnoremap <leader>wa mz:%s/\s\+$//<cr>:let @/=''<cr>`z
-nnoremap <leader>ww mz:%s/^\s\+$//<cr>:let @/=''<cr>`z
-
-" Make sure Vim returns to the same line when you reopen a file.
+" make sure Vim returns to the same line when you reopen a file.
 augroup line_return
   au!
   au BufReadPost *
@@ -100,8 +106,9 @@ augroup END
 
 "}}}
 " > Timeout           {{{
-" Time out on key codes but not mappings.
-" Basically this makes terminal Vim work sanely.
+
+" time out on key codes but not mappings.
+" basically this makes terminal Vim work sanely.
 set notimeout
 set ttimeout
 set ttimeoutlen=10
@@ -109,6 +116,8 @@ set ttimeoutlen=10
 " }}}
 " > Backup            {{{
 
+" disable all backups
+set noundofile
 set nobackup
 set noswapfile
 set nowb
@@ -177,47 +186,28 @@ vnoremap L g_
 vnoremap J <c-f>M
 vnoremap K <c-b>M
 
-map <tab> %
+nnoremap <tab> %
 
 " }}}
 
 " }}}
-" Wildmenu         {{{
+" Path & Wildmenu  {{{
+
+" search in the directory
+set path+=**
 
 set wildmenu
 set wildmode=list:longest
 set wildignore=*~,*.pyc
 set wildignore+=.git,.hg,.svn
 set wildignore+=*.png,*.jpg,*.jpeg,*.bmp,*.gif,*.pdf
-set wildignore+=*.o,*.obj,*.exe,*.dll
+set wildignore+=*.o,*.so,*.dylib,*.obj,*.exe,*.dll
 
 "}}}
-" Spelling         {{{
-
-set spellfile=~/.local/share/nvim/spell/dict-en.utf-8.add,~/.local/share/nvim/spell/dict-tr.utf-8.add
-
-let g:myLang=0
-let g:myLangList=["nospell","en_us","tr"]
-
-function! ToggleSpell() " {{{
-  let g:myLang=g:myLang+1
-  if g:myLang>=len(g:myLangList) | let g:myLang=0 | endif
-  if g:myLang==0
-    setlocal nospell
-  else
-    execute "setlocal spell spelllang=".get(g:myLangList, g:myLang)
-  endif
-  echo "spell checking language:" g:myLangList[g:myLang]
-endfunction " }}}
-nnoremap <silent> <F7> :call ToggleSpell()<cr>
-
-nnoremap zG 2zg
-
-" }}}
 " Folding          {{{
 
 set nofoldenable
-set foldlevelstart=0
+"set foldlevelstart=0
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -250,7 +240,9 @@ set foldtext=MyFoldText()
 " }}}
 " > C / C++           {{{
 
-    au FileType c,cpp setlocal textwidth=80 foldmethod=marker foldnestmax=1 foldmarker={,}
+    au FileType c,cpp setlocal textwidth=80
+    au FileType c,cpp setlocal foldmethod=syntax
+    au FileType c,cpp normal zR
     au FileType c,cpp map <F6> :!make<cr>
 
 " }}}
@@ -259,10 +251,9 @@ set foldtext=MyFoldText()
 augroup ft_python
     au!
 
-    au FileType python setlocal textwidth=80 foldmethod=indent foldnestmax=2 define=^\s*\\(def\\\\|class\\)
-    au FileType man nnoremap <buffer> <cr> :q<cr>
-    "au FileType python if exists("python_space_error_highlight") | unlet python_space_error_highlight | endif
-    "au FileType python iabbrev <buffer> afo assert False, "Okay"
+    au FileType python setlocal textwidth=80
+    au FileType python setlocal foldmethod=indent foldnestmax=2 define=^\s*\\(def\\\\|class\\)
+    au FileType python normal zR
     au FileType python map <F6> :!python %<cr>
 
 augroup END
@@ -274,11 +265,6 @@ augroup ft_rst
     au!
 
     au BufNewFile,BufRead *.rst setlocal filetype=rst fo+=aw
-    au Filetype rst nnoremap <buffer> <localleader>1 yyppVr=2kVr=3j:redraw<cr>
-    au Filetype rst nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
-    au Filetype rst nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
-    au Filetype rst nnoremap <buffer> <localleader>4 yypVr`:redraw<cr>
-
     au FileType rst setl suffixesadd=.rst
     au BufWritePost *.rst silent! execute "!make html >/dev/null 2>&1" | redraw!
     au FileType rst map <F6> :!make html &> /dev/null&<cr><cr>
@@ -292,17 +278,9 @@ augroup ft_md
 
     au FileType markdown setlocal textwidth=80 softtabstop=2 tabstop=2 shiftwidth=2
     au BufNewFile,BufRead *.md setlocal filetype=markdown fo+=w
-    au Filetype markdown nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
-    au Filetype markdown nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
-    au Filetype markdown nnoremap <buffer> <localleader>3 yypVr~:redraw<cr>
-    au Filetype markdown nnoremap <buffer> <localleader>4 yypVr`:redraw<cr>
     au FileType markdown setl suffixesadd=.md
 
     let g:markdown_folding = 1
-    " Replace the lastmod date on markdow notes
-    au BufWritePost *.md execute ":silent! 1," . 20 . "g/^lastmod:/s/20.*/" .strftime("%Y-%m-%d") | execute "''"
-
-    au FileType markdown map <F6> :silent !qutebrowser http://localhost:1313/%:r<cr>
 augroup END
 
 " }}}
@@ -313,18 +291,8 @@ augroup ft_vim
 
     au FileType vim setlocal foldmethod=marker
     au FileType help setlocal textwidth=80
+    au FileType vim normal zR
     au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
-augroup END
-
-" }}}
-" > Mutt              {{{
-"
-augroup ft_mutt
-    au!
-
-    au FileType muttrc setlocal foldmethod=marker foldmarker={{{,}}}
-    au FileType mail setlocal comments+=nb:> tw=72 fo+=aw nojs nosmartindent
-
 augroup END
 
 " }}}
@@ -355,7 +323,7 @@ augroup END
 " disable u in visual mode
 vnoremap u <nop>
 
-" i use o esc a lot. move it to enter in normal mode
+" enter does o<esc>
 nnoremap <cr> o<esc>
 
 " overload save
@@ -380,7 +348,7 @@ nnoremap U :syntax sync fromstart<cr>:redraw!<cr>
 nnoremap <leader><leader> :noh<cr>
 
 " Toggle line numbers
-nnoremap <leader>n :set nonumber!<cr>:set norelativenumber!<cr>
+nnoremap <leader>l :set nonumber!<cr>:set norelativenumber!<cr>
 
 " Toggle [i]nvisible characters
 nnoremap <leader>i :set list!<cr>
@@ -406,25 +374,20 @@ vnoremap <S-Tab> <gv
 vnoremap > >gv
 vnoremap < <gv
 
-nnoremap <leader>t :TlistToggle<cr>
 map <F10> <ESC>ggg?G``
 
-" Copy pase with visual selection
-vnoremap <C-C> :w !xclip -i -sel c<CR><CR>
-vnoremap <C-V> :r !xclip -o -sel c<CR><CR>
+" Copy paste with visual selection
+vnoremap <C-C> :w !pbcopy<CR><CR>
+"vnoremap <C-V> :r !pbpaste<CR><CR>
 
-" Rebuild Ctags (mnemonic RC -> cr -> <cr>)
-"nnoremap <leader><cr> :silent !myctags >/dev/null 2>&1 &<cr>:redraw!<cr>
-" > FileType executions {{{
-
-au FileType html,xhtml map <F6> :!qutebrowser %<cr>
-
-" }}}
+"nnoremap ; :buffers<CR>:buffer<Space>
 
 " }}}
 " Plugins          {{{
 
 " > junegunn/fzf            {{{
+
+set rtp+=/opt/homebrew/opt/fzf
 
 " open files
 map ; :Files<cr>
@@ -443,7 +406,7 @@ command! -bang -nargs=* Rg
 " }}}
 " > preservim/nerdtree      {{{
 
-map <F2> :NERDTreeToggle<cr>
+map <leader>n :NERDTreeToggle<cr>
 
 " open NERDTree if no files are were specified
 autocmd StdinReadPre * let s:std_in=1
@@ -455,66 +418,8 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 " }}}
 " > itchyny/lightline.vim   {{{
 
-set noshowmode
-let g:lightline = {
-      \ 'colorscheme': 'nord',
-      \ 'active': {
-      \   'left': [
-      \     [ 'mode', 'paste' ],
-      \     [ 'fugitive', 'filename' ]
-      \   ]
-      \ },
-      \ 'component_function': {
-      \   'fugitive': 'LightlineFugitive',
-      \   'readonly': 'LightlineReadonly',
-      \   'modified': 'LightlineModified',
-      \   'filename': 'LightlineFilename'
-      \ },
-      \ 'separator': {
-      \   'left': '',
-      \   'right': ''
-      \ },
-      \ 'subseparator': {
-      \   'left': '',
-      \   'right': ''
-      \ }
-    \ }
+let g:airline_theme='onehalfdark'
 
-function! LightlineModified()
-  if &filetype == "help"
-    return ""
-  elseif &modified
-    return "+"
-  elseif &modifiable
-    return ""
-  else
-    return ""
-  endif
-endfunction
-
-function! LightlineReadonly()
-  if &filetype == "help"
-    return ""
-  elseif &readonly
-    return ""
-  else
-    return ""
-  endif
-endfunction
-
-function! LightlineFugitive()
-  if exists("*fugitive#head")
-    let branch = fugitive#head()
-    return branch !=# '' ? ' '.branch : ''
-  endif
-  return ''
-endfunction
-
-function! LightlineFilename()
-  return ('' != LightlineReadonly() ? LightlineReadonly() . ' ' : '') .
-       \ ('' != expand('%:t') ? expand('%:t') : '[No Name]') .
-       \ ('' != LightlineModified() ? ' ' . LightlineModified() : '')
-endfunction
 " }}}
 " > neoclide/coc            {{{
 
@@ -569,55 +474,15 @@ function! s:show_documentation() " {{{
 endfunction " }}}
 
 " }}}
+" > tpope/vim-commentary    {{{
+
+autocmd FileType cpp setlocal commentstring=//\ %s
 
 " }}}
-" Zettelkasten     {{{
-" Set up for Hugo Static Site generator
+" > yegappan/taglist        {{{
 
-" Zettelkasten location
-let g:zettelkasten = "~/notebooks/"
+nnoremap <leader>t :TlistToggle<cr>
 
-" mnemonic link zettel
-inoremap <expr> <c-l>z fzf#vim#complete({
-  \ 'source':  'rg --no-heading --smart-case --multiline --pcre2 "^title+"',
-  \ 'reducer': function('<sid>zettel_note_link'),
-  \ 'options': '--multi --reverse --margin 15%,0',
-  \ 'up':    10})
-
-" Insert note line in md format
-function! s:zettel_note_link(l) " {{{
-  " fzf#vim#complete returns a list with all info in index 0
-  let line = split(a:l[0], ':')
-  let ztk_id = substitute(l:line[0], '\.md', '', '')
-  try
-    let ztk_title = substitute(l:line[2], '\v "|"', '', 'g')
-  catch
-    let ztk_title = substitute(l:line[1], '\v "|"', '', 'g')
-  endtry
-    let mdlink = "[". ztk_title ."](../". ztk_id .")"
-    return mdlink
-endfunction " }}}
-
-" Create a new note
-function! s:zettel_new_note(...) " {{{
-  " build the filename
-  let l:sep = ''
-  if len(a:000) > 0
-    let l:sep = '-'
-  endif
-  let l:zetname = strftime("%Y%m%d%H%M") . l:sep . join(a:000, '-') . '.md'
-
-  " create file
-  execute "cd " . g:zettelkasten
-  execute "!hugo new " . l:zetname
-
-  " edit the new file
-  execute "e " . g:zettelkasten . "content/" . l:zetname
-
-  " edit title and get ready to edit
-  exec "normal gg1j3wdw~G\<cr>\<cr>"
-
-endfunction " }}}
-command! -nargs=* Note call s:zettel_new_note(<f-args>)
+" }}}
 
 " }}}

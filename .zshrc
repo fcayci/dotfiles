@@ -33,8 +33,14 @@ alias config='$(which git) --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 [ -d "/opt/homebrew/bin" ] && path+=('/opt/homebrew/bin')
 #[ -d "/opt/homebrew/bin" ] && path=('/opt/homebrew/bin' $path)
 
-# give default fzf command
-[ -x "$(which fzf)" ] && [ -x "$(which ag)" ] && export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+# setup fzf
+if [ -f ~/.fzf.zsh ]; then
+  source ~/.fzf.zsh
+  # default fzf command
+  if [ -x "$(which ag)" ]; then
+      export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+  fi
+fi
 
 # Vi mode
 bindkey -v

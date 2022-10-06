@@ -3,8 +3,6 @@
 
 " Essentials       {{{
 
-set nocompatible
-
 filetype on
 filetype plugin on
 filetype indent on
@@ -16,11 +14,20 @@ let maplocalleader = "\\"
 " tags locations
 set tags=./tags,tags;$HOME
 
+" enable mouse
+set mouse=nic
+
 " }}}
 " Colorscheme      {{{
 
 syntax enable
 colorscheme onehalfdark
+
+" Enable true color support. Do not set this option if your terminal does not
+" support true colors! For a comprehensive list of terminals supporting true
+" colors.
+" https://github.com/termstandard/colors
+set termguicolors
 
 " }}}
 " Basic Options    {{{
@@ -53,6 +60,9 @@ set nojoinspaces
 set autochdir
 set autoindent
 
+" minimum lines to keep above and below cursor when scrolling
+set scrolloff=3
+
 " show whitespaces
 set list
 
@@ -70,7 +80,8 @@ nnoremap <leader>ww mz:%s/^\s\+$//<cr>:let @/=''<cr>`z
 set linebreak
 set showbreak=↪
 
-set synmaxcol=800 " Dont highlight longer than 800 chars
+" dont highlight longer than this many chars
+set synmaxcol=200
 
 set textwidth=80
 
@@ -88,21 +99,15 @@ set completeopt=longest,menuone,preview
 " resize splits when the window is resized
 au VimResized * :wincmd =
 
-" only show cursorline in the current window and in normal mode.
-augroup cline
-    au!
-    au WinLeave,InsertEnter * set nocursorline
-    au WinEnter,InsertLeave * set cursorline
-augroup END
+" Clipboard settings, always use clipboard for all delete, yank, change, put
+" operation
+" https://stackoverflow.com/q/30691466/6064933
+if !empty(provider#clipboard#Executable())
+  set clipboard+=unnamedplus
+endif
 
-" make sure Vim returns to the same line when you reopen a file.
-augroup line_return
-  au!
-  au BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \     execute 'normal! g`"zvzz' |
-    \ endif
-augroup END
+set spelllang=en
+set spellsuggest+=9
 
 "}}}
 " > Timeout           {{{
@@ -111,7 +116,8 @@ augroup END
 " basically this makes terminal Vim work sanely.
 set notimeout
 set ttimeout
-set ttimeoutlen=10
+set ttimeoutlen=400
+set updatetime=500
 
 " }}}
 " > Backup            {{{
@@ -188,6 +194,14 @@ vnoremap K <c-b>M
 
 nnoremap <tab> %
 
+" diff options
+set diffopt=
+set diffopt+=vertical   " show diff in vertical position
+set diffopt+=filler     " show filler for deleted lines
+set diffopt+=closeoff   " turn off diff when one file window is closed
+set diffopt+=context:3  " context for diff
+set diffopt+=internal,indent-heuristic,algorithm:histogram
+
 " }}}
 
 " }}}
@@ -208,6 +222,8 @@ set wildignore+=*.o,*.so,*.dylib,*.obj,*.exe,*.dll
 
 set nofoldenable
 "set foldlevelstart=0
+
+set fillchars=fold:\ ,vert:\│,eob:\ ,msgsep:‾
 
 " Space to toggle folds.
 nnoremap <Space> za
@@ -318,7 +334,7 @@ augroup END
 " }}}
 
 " }}}
-" Custom Mappigns  {{{
+" Custom Stuff     {{{
 
 " disable u in visual mode
 vnoremap u <nop>
@@ -366,10 +382,6 @@ nmap <leader><right>  :rightbelow vsp<cr>
 nmap <leader><up>     :leftabove  sp<cr>
 nmap <leader><down>   :rightbelow sp<cr>
 
-" Tab/shift-tab to indent/outdent in visual mode.
-vnoremap <Tab> >gv
-vnoremap <S-Tab> <gv
-
 " Keep selection when indenting/outdenting.
 vnoremap > >gv
 vnoremap < <gv
@@ -381,6 +393,57 @@ vnoremap <C-C> :w !pbcopy<CR><CR>
 "vnoremap <C-V> :r !pbpaste<CR><CR>
 
 "nnoremap ; :buffers<CR>:buffer<Space>
+
+" }}}
+" Autocommands     {{{
+
+" only show cursorline in the current window and in normal mode.
+augroup cline
+  au!
+  au WinLeave,InsertEnter * set nocursorline
+  au WinEnter,InsertLeave * set cursorline
+augroup END
+
+" do not use smart case in command line mode
+augroup dynamic_smartcase
+  autocmd!
+  autocmd CmdLineEnter : set nosmartcase
+  autocmd CmdLineLeave : set smartcase
+augroup END
+
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
+augroup END
+
+" more accurate syntax highlighting? (see `:h syn-sync`)
+augroup accurate_syn_highlight
+  autocmd!
+  autocmd BufEnter * :syntax sync fromstart
+augroup END
+
+" Return to last cursor position when opening a file
+augroup resume_cursor_position
+  autocmd!
+  autocmd BufReadPost * call s:resume_cursor_position()
+augroup END
+
+" Only resume last cursor position when there is no go-to-line command
+function s:resume_cursor_position() abort
+  if line("'\"") > 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    let l:args = v:argv  " command line arguments
+    for l:cur_arg in l:args
+      " Check if a go-to-line command is given.
+      let idx = match(l:cur_arg, '\v^\+(\d){1,}$')
+      if idx != -1
+        return
+      endif
+    endfor
+
+    execute "normal! g`\"zvzz"
+  endif
+endfunction
 
 " }}}
 " Plugins          {{{

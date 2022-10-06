@@ -51,5 +51,8 @@ bindkey -v
 # add local bin directory
 [ -d "$HOME/.local/bin" ] && path+=$HOME/.local/bin
 
+# add local tools
+[ -f "$HOME/.local/bin/local_tools.sh" ] && source $HOME/.local/bin/local_tools.sh
+
 export PATH
 

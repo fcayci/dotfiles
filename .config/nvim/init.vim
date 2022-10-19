@@ -73,17 +73,13 @@ set listchars=tab:▸\ ,extends:❯,precedes:❮
 " show trailing whitespace:
 au BufWinEnter * :set listchars+=trail:·
 
-" clean trailing whitespace (all / only empty)
-nnoremap <leader>wa mz:%s/\s\+$//<cr>:let @/=''<cr>`z
-nnoremap <leader>ww mz:%s/^\s\+$//<cr>:let @/=''<cr>`z
-
 set linebreak
 set showbreak=↪
 
 " dont highlight longer than this many chars
 set synmaxcol=200
 
-set textwidth=80
+set textwidth=100
 
 set magic
 set mat=2
@@ -249,17 +245,15 @@ set foldtext=MyFoldText()
 " }}}
 " FileTypes        {{{
 
-" > ASM               {{{
-
-    au FileType asm setlocal noexpandtab shiftwidth=4 tabstop=4 softtabstop=4
-
-" }}}
 " > C / C++           {{{
 
-    au FileType c,cpp setlocal textwidth=80
+augroup ft_c
+    au!
+
     au FileType c,cpp setlocal foldmethod=syntax
     au FileType c,cpp normal zR
     au FileType c,cpp map <F6> :!make<cr>
+augroup END
 
 " }}}
 " > Python            {{{
@@ -267,11 +261,9 @@ set foldtext=MyFoldText()
 augroup ft_python
     au!
 
-    au FileType python setlocal textwidth=80
     au FileType python setlocal foldmethod=indent foldnestmax=2 define=^\s*\\(def\\\\|class\\)
     au FileType python normal zR
     au FileType python map <F6> :!python %<cr>
-
 augroup END
 
 " }}}
@@ -292,7 +284,7 @@ augroup END
 augroup ft_md
     au!
 
-    au FileType markdown setlocal textwidth=80 softtabstop=2 tabstop=2 shiftwidth=2
+    au FileType markdown setlocal softtabstop=2 tabstop=2 shiftwidth=2
     au BufNewFile,BufRead *.md setlocal filetype=markdown fo+=w
     au FileType markdown setl suffixesadd=.md
 
@@ -306,7 +298,6 @@ augroup ft_vim
     au!
 
     au FileType vim setlocal foldmethod=marker
-    au FileType help setlocal textwidth=80
     au FileType vim normal zR
     au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
 augroup END
@@ -334,16 +325,14 @@ augroup END
 " }}}
 
 " }}}
-" Custom Stuff     {{{
+" Custom Mappings  {{{
+
+" clean trailing whitespace (all / only empty)
+nnoremap <leader>wa mz:%s/\s\+$//<cr>:let @/=''<cr>`z
+nnoremap <leader>ww mz:%s/^\s\+$//<cr>:let @/=''<cr>`z
 
 " disable u in visual mode
 vnoremap u <nop>
-
-" enter does o<esc>
-nnoremap <cr> o<esc>
-
-" overload save
-nnoremap S :w<cr>
 
 " disable ex mode
 noremap Q <nop>
@@ -391,6 +380,13 @@ map <F10> <ESC>ggg?G``
 " Copy paste with visual selection
 vnoremap <C-C> :w !pbcopy<CR><CR>
 "vnoremap <C-V> :r !pbpaste<CR><CR>
+
+" clang-format
+function! ClangFormat(...)
+  execute ":" . a:1 . "," . a:2 . "!clang-format"
+endfunction
+
+nnoremap <silent> <leader>f :<c-u>call ClangFormat(line("."), line(".")+v:count1)<cr>
 
 "nnoremap ; :buffers<CR>:buffer<Space>
 
@@ -456,15 +452,29 @@ set rtp+=/opt/homebrew/opt/fzf
 map ; :Files<cr>
 map gb :Buffers<cr>
 
-nnoremap <leader>f :Rg<cr>
-
-" Rg current word
-nnoremap <silent> <Leader>rg :Rg <C-R><C-W><CR>
-
+" RipGrep
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
   \fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+
+" Silver Searcher
+command! -bang -nargs=* Ag
+  \ call fzf#vim#grep(
+  \   'ag --column --numbers --literal --nobreak --noheading --color --smart-case '.shellescape(<q-args>), 1,
+  \fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+
+" Git Grep
+command! -bang -nargs=* GGrep
+  \ call fzf#vim#grep(
+  \   'git grep --line-number --color=always -w -- '.shellescape(<q-args>), 1,
+  \fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+
+" Rg current word
+nnoremap <silent> <leader>rg :Rg <c-r><c-w><cr>
+
+" Git grep current word
+nnoremap <silent> <leader>g :GGrep <c-r><c-w><cr>
 
 " }}}
 " > preservim/nerdtree      {{{

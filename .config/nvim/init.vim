@@ -491,7 +491,9 @@ let NERDTreeIgnore=['\.pyc$', '\~$']
 " }}}
 " > itchyny/lightline.vim   {{{
 
-let g:airline_theme='onehalfdark'
+let g:lightline = {
+  \ 'colorscheme': 'onehalfdark',
+  \ }
 
 " }}}
 " > neoclide/coc            {{{

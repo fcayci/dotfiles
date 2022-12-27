@@ -104,6 +104,9 @@ endif
 
 set spelllang=en
 set spellsuggest+=9
+set spell
+
+set noautochdir
 
 "}}}
 " > Timeout           {{{
@@ -390,6 +393,17 @@ nnoremap <silent> <leader>f :<c-u>call ClangFormat(line("."), line(".")+v:count1
 
 "nnoremap ; :buffers<CR>:buffer<Space>
 
+" Use M to show documentation in preview window.
+nnoremap <silent> M :call <SID>show_documentation()<cr>
+
+function! s:show_documentation() " {{{
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction " }}}
+
 " }}}
 " Autocommands     {{{
 
@@ -537,17 +551,6 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use M to show documentation in preview window.
-nnoremap <silent> M :call <SID>show_documentation()<cr>
-
-function! s:show_documentation() " {{{
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction " }}}
-
 " }}}
 " > tpope/vim-commentary    {{{
 
@@ -559,5 +562,10 @@ autocmd FileType cpp setlocal commentstring=//\ %s
 nnoremap <leader>t :TlistToggle<cr>
 
 " }}}
+" > neoclide/coc.nvim       {{{
 
+" make <cr> confirm completion
+inoremap <expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
+" }}}
 " }}}

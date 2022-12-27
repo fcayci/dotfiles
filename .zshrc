@@ -31,7 +31,9 @@ alias config='$(which git) --git-dir=$HOME/.dotfiles.git/ --work-tree=$HOME'
 
 # add homebrew
 [ -d "/opt/homebrew/bin" ] && path+=('/opt/homebrew/bin')
-#[ -d "/opt/homebrew/bin" ] && path=('/opt/homebrew/bin' $path)
+# [ -d "/opt/homebrew/bin" ] && path=('/opt/homebrew/bin' $path)
+[ -d "/opt/homebrew/opt/python/libexec/bin" ] && path=('/opt/homebrew/opt/python/libexec/bin' $path)
+
 
 # use homebrew ctags
 [ -x "`brew --prefix`/bin/ctags" ] && alias ctags="`brew --prefix`/bin/ctags"
@@ -54,5 +56,6 @@ bindkey -v
 # add local tools
 [ -f "$HOME/.local/bin/local_tools.sh" ] && source $HOME/.local/bin/local_tools.sh
 
-export PATH
+alias gtkwave="/Applications/gtkwave.app/Contents/Resources/bin/gtkwave"
 
+export PATH

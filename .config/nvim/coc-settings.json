@@ -16,5 +16,8 @@
     "line_length": false,
     "no-hard-tabs": false,
     "whitespace": false
+  },
+  "rust-analyzer": {
+    "server.path": "/opt/homebrew/bin/rust-analyzer"
   }
 }

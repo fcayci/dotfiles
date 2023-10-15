@@ -135,7 +135,6 @@ require('lazy').setup({
       "nvim-tree/nvim-web-devicons",
       'MunifTanjim/nui.nvim',
     },
-    opt = {}
   },
 
   -- Show todo comments
@@ -191,7 +190,6 @@ require('lazy').setup({
       end)
     end,
   },
-
 })
 
 
@@ -210,8 +208,8 @@ vim.o.undofile = true
 vim.o.signcolumn = 'yes'
 vim.o.completeopt = 'menu,noselect'
 vim.o.path = '.,/usr/include,,**'
--- vim.o.termguicolors = true
--- vim.o.clipboard = 'unnamedplus'
+vim.o.termguicolors = true
+vim.o.clipboard = 'unnamedplus'
 
 vim.o.updatetime = 250
 vim.o.timeout = true
@@ -313,9 +311,21 @@ autocmd('BufWritePre', {
 })
 
 -- Format on save on given file patterns
+augroup('Format', { clear = true })
 autocmd('BufWritePre', {
-  pattern = { '*.lua, *.rs', },
-  command = 'lua vim.lsp.buf.format()'
+  pattern = { '*.lua', '*.rs', },
+  callback = function()
+    vim.lsp.buf.format()
+  end,
+  group = 'Format',
+})
+
+augroup('DiagnosticFloat', { clear = true })
+autocmd('CursorHold', {
+  callback = function()
+    vim.diagnostic.open_float(nil, { focusable = false })
+  end,
+  group = 'DiagnosticFloat',
 })
 
 
@@ -415,6 +425,22 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 --------------------------------------------------
 -- mason
 --------------------------------------------------
+local servers = {
+  clangd = {},
+  rust_analyzer = {
+    check = {
+      command = "clippy",
+    }
+  },
+
+  lua_ls = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+    },
+  },
+}
+
 require('mason').setup({
   ui = {
     icons = {
@@ -431,13 +457,10 @@ require("mason-lspconfig").setup_handlers {
   function(server_name)
     lspconfig[server_name].setup {
       capabilities = capabilities,
+      settings = servers[server_name],
     }
-    -- ["rust_analyzer"] = function ()
-    --   require("rust-tools").setup {}
-    -- end
   end,
 }
-
 
 --------------------------------------------------
 -- Telescope
@@ -628,6 +651,7 @@ vim.o.fillchars = [[eob: ,fold: ,foldopen:▼,foldsep: ,foldclose:▶]]
 --------------------------------------------------
 -- Neo-tree
 --------------------------------------------------
+require('neo-tree').setup()
 vim.keymap.set('n', '<leader>e', ':Neotree toggle<cr>', { desc = 'toggle [e]xplorer' })
 
 

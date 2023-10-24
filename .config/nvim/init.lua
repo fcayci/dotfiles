@@ -279,6 +279,9 @@ vim.keymap.set('n', 'vv', '^vg_', { desc = 'Select block' })
 vim.keymap.set('v', '>', '>gv')
 vim.keymap.set('v', '<', '<gv')
 
+-- Use tab for folds
+vim.keymap.set('n', '<tab>', 'za')
+
 -- Toggle numbers
 vim.keymap.set('n', '<leader>n', ':set nonumber!<cr>:set relativenumber!<cr>', { desc = 'toggle [n]umbers' })
 
@@ -343,10 +346,9 @@ local lspconfig = require('lspconfig')
 -- Get rid if inline diagnostics. Only keep the symbols
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
+    underline = false,
     virtual_text = false,
     show_signs = true,
-    -- Disable a feature
     update_in_insert = false,
   })
 
